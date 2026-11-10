@@ -389,11 +389,46 @@
       margin: 0 auto 24px;
     }
 
-    .contact-buttons {
+    .contact-list {
       display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 12px;
+      max-width: 520px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      padding: 12px 18px;
+      border-radius: 6px;
+      font-size: 0.92rem;
+      color: #e2e8f0;
+      word-break: break-all;
+    }
+
+    .contact-item i {
+      font-size: 1.1rem;
+      color: #38bdf8;
+      width: 22px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item .label {
+      font-weight: 700;
+      color: #ffffff;
+      min-width: 85px;
+      flex-shrink: 0;
+    }
+
+    .contact-item .value {
+      color: #94a3b8;
+      user-select: all;
     }
 
     /* ================= FOOTER ================= */
@@ -708,19 +743,31 @@
       <div class="contact-container">
         <h2>Vamos conversar?</h2>
         <p>Estou à disposição para entrevistas, vagas de estágio, oportunidades júnior e projetos freelance.</p>
-        <div class="contact-buttons">
-          <a href="mailto:eusantosmarcos123@gmail.com" class="btn btn-blue">
-            <i class="fa-solid fa-envelope"></i> Enviar E-mail
-          </a>
-          <a href="https://github.com/eusantosmarcos123-ui" target="_blank" rel="noopener noreferrer" class="btn btn-dark">
-            <i class="fa-brands fa-github"></i> GitHub
-          </a>
-          <a href="https://api.whatsapp.com/send?phone=5575999999999&text=Ol%C3%A1%20Marcos!%20Vi%20o%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener noreferrer" class="btn btn-dark">
-            <i class="fa-brands fa-whatsapp"></i> WhatsApp
-          </a>
-          <a href="https://linkedin.com/in/marcos-vinicius" target="_blank" rel="noopener noreferrer" class="btn btn-dark">
-            <i class="fa-brands fa-linkedin"></i> LinkedIn
-          </a>
+        
+        <div class="contact-list">
+          <div class="contact-item">
+            <i class="fa-solid fa-envelope"></i>
+            <span class="label">E-mail:</span>
+            <span class="value">eusantosmarcos123@gmail.com</span>
+          </div>
+          
+          <div class="contact-item">
+            <i class="fa-brands fa-github"></i>
+            <span class="label">GitHub:</span>
+            <span class="value">github.com/eusantosmarcos123-ui</span>
+          </div>
+
+          <div class="contact-item">
+            <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i>
+            <span class="label">WhatsApp:</span>
+            <span class="value">+55 (75) 99999-9999</span>
+          </div>
+
+          <div class="contact-item">
+            <i class="fa-brands fa-linkedin" style="color: #0a66c2;"></i>
+            <span class="label">LinkedIn:</span>
+            <span class="value">linkedin.com/in/marcos-vinicius</span>
+          </div>
         </div>
       </div>
     </div>
