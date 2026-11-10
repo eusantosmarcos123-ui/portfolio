@@ -3,934 +3,428 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marcos Vinícius | Software Engineer & Mobile Developer</title>
-  
-  <meta name="description" content="Portfólio Editorial Dark & Crimson de Marcos Vinícius dos Santos. Software Engineer, Full Stack, Mobile e ADS.">
+  <title>Marcos Vinícius | Desenvolvedor de Software</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+  
   <style>
-    /* ==========================================================================
-       TEMA EDITORIAL CRIMSON & DARK - ULTRA RESPONSIVO & POLIDO
-       Inspirado no Design Editorial de Alta Moda & Tech Creator
-       Marcos Vinícius dos Santos | Software Engineer
-       ========================================================================== */
-
-    :root {
-      --bg-primary: #070709;
-      --bg-secondary: #0f0f13;
-      --bg-card: #14141a;
-      --bg-card-hover: #191922;
-      --crimson: #e50914;
-      --crimson-hover: #ff1f2d;
-      --crimson-glow: rgba(229, 9, 20, 0.45);
-      --crimson-dim: rgba(229, 9, 20, 0.12);
-      --crimson-border: rgba(229, 9, 20, 0.35);
-      --text-white: #ffffff;
-      --text-gray: #9ca3af;
-      --text-muted: #6b7280;
-      --border-subtle: #202028;
-      --font-display: 'Anton', impact, sans-serif;
-      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-hand: 'Caveat', cursive;
-      --radius: 12px;
-      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    * {
+    /* ================= RESET & BASE ================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      background-color: var(--bg-primary);
-      -webkit-text-size-adjust: 100%;
     }
 
     body {
-      font-family: var(--font-body);
-      background-color: var(--bg-primary);
-      color: var(--text-white);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0b0f17;
+      color: #e2e8f0;
       line-height: 1.6;
-      overflow-x: hidden;
-      width: 100%;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .container {
-      width: 100%;
-      max-width: 1240px;
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .wrapper {
+      max-width: 1040px;
       margin: 0 auto;
-      padding: 0 clamp(16px, 4vw, 32px);
+      padding: 0 20px;
     }
 
-    /* ================= Top Bar ================= */
-    .topbar {
+    /* ================= HEADER / NAVEGAÇÃO ================= */
+    header {
+      background-color: #111827;
+      border-bottom: 1px solid #1f2937;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: clamp(16px, 3vw, 24px) 0;
-      border-bottom: 1px solid var(--border-subtle);
-      font-size: clamp(0.7rem, 1.8vw, 0.8rem);
+      height: 64px;
+    }
+
+    .logo {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo span {
+      color: #3b82f6;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: #ffffff;
+    }
+
+    /* ================= HERO SECTION COM FOTO ================= */
+    .hero {
+      padding: 60px 0 40px;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    .hero-layout {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .hero-text {
+      flex: 1;
+    }
+
+    .hero-avatar-wrapper {
+      flex-shrink: 0;
+    }
+
+    .profile-photo {
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      border: 3px solid #2563eb;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+      background-color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .profile-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-fallback {
+      font-size: 4rem;
+      color: #64748b;
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      color: #38bdf8;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .badge-status .circle {
+      width: 8px;
+      height: 8px;
+      background-color: #10b981;
+      border-radius: 50%;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
       font-weight: 800;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      color: #ffffff;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .lead-text {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      max-width: 780px;
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
       flex-wrap: wrap;
       gap: 12px;
     }
 
-    .topbar-role {
-      color: var(--crimson);
-    }
-
-    .topbar .status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-gray);
-    }
-
-    .topbar .status-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--crimson);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--crimson);
-      animation: pulse-dot 2s infinite;
-    }
-
-    @keyframes pulse-dot {
-      0% { transform: scale(0.9); opacity: 0.8; }
-      50% { transform: scale(1.3); opacity: 1; }
-      100% { transform: scale(0.9); opacity: 0.8; }
-    }
-
-    /* ================= Hero Editorial Section ================= */
-    .hero-editorial {
-      position: relative;
-      padding: clamp(30px, 6vw, 70px) 0 clamp(40px, 8vw, 90px);
-      overflow: hidden;
-    }
-
-    /* Marca d'água vermelha gigante ao fundo */
-    .watermark-bg {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -55%);
-      font-family: var(--font-display);
-      font-size: clamp(5rem, 21vw, 19rem);
-      color: var(--crimson);
-      opacity: 0.14;
-      line-height: 0.8;
-      letter-spacing: 0.04em;
-      user-select: none;
-      pointer-events: none;
-      z-index: 0;
-      white-space: nowrap;
-      text-align: center;
-    }
-
-    .hero-grid {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: 1.15fr 1.1fr 0.75fr;
-      align-items: center;
-      gap: clamp(20px, 3.5vw, 44px);
-    }
-
-    /* Coluna Esquerda */
-    .hero-left {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .hero-handwrite {
-      font-family: var(--font-hand);
-      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
-      color: #ff3344;
-      margin-bottom: -10px;
-      transform: rotate(-3deg);
-    }
-
-    .hero-name {
-      font-family: var(--font-display);
-      font-size: clamp(3.2rem, 6.8vw, 5.8rem);
-      line-height: 0.92;
-      letter-spacing: 0.02em;
-      color: var(--text-white);
-      margin-bottom: 14px;
-      text-transform: uppercase;
-    }
-
-    .hero-role-badge {
-      font-size: clamp(0.72rem, 1.6vw, 0.85rem);
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      color: var(--crimson);
-      text-transform: uppercase;
-      margin-bottom: 18px;
-      background: var(--crimson-dim);
-      border: 1px solid var(--crimson-border);
-      padding: 6px 14px;
-      border-radius: 100px;
-    }
-
-    .hero-bio {
-      font-size: clamp(0.92rem, 1.8vw, 1.05rem);
-      color: var(--text-gray);
-      line-height: 1.65;
-      margin-bottom: 24px;
-      max-width: 440px;
-    }
-
-    .badge-location {
+    .btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      color: var(--text-gray);
-      text-transform: uppercase;
-      padding: 6px 14px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 100px;
-    }
-
-    .badge-location i {
-      color: var(--crimson);
-    }
-
-    /* Coluna Central: Retrato com Glow Vermelho */
-    .hero-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      width: 100%;
-    }
-
-    .portrait-frame {
-      position: relative;
-      width: 100%;
-      max-width: 350px;
-      height: clamp(360px, 44vw, 490px);
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: radial-gradient(circle at 50% 35%, rgba(229, 9, 20, 0.35), transparent 75%), #111116;
-      border: 1px solid var(--crimson-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(229, 9, 20, 0.22);
-    }
-
-    .portrait-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
-      transition: filter 0.4s ease, transform 0.4s ease;
-      display: block;
-    }
-
-    .portrait-frame:hover .portrait-img {
-      transform: scale(1.03);
-    }
-
-    .hero-quote-tag {
-      position: absolute;
-      bottom: 20px;
-      right: -15px;
-      background: rgba(18, 18, 24, 0.96);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--border-subtle);
-      border-left: 3px solid var(--crimson);
-      border-radius: 8px;
-      padding: 10px 14px;
-      max-width: 210px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
-      z-index: 2;
-    }
-
-    .hero-quote-tag p {
-      font-size: 0.74rem;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 0.9rem;
       font-weight: 600;
-      line-height: 1.4;
-      color: var(--text-white);
+      transition: all 0.2s;
     }
 
-    /* Switcher Interativo de Foto */
-    .photo-switcher {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 14px;
-      background: rgba(20, 20, 26, 0.85);
-      padding: 6px;
-      border-radius: 100px;
-      border: 1px solid var(--border-subtle);
-      z-index: 2;
-      max-width: 380px;
+    .btn-blue {
+      background-color: #2563eb;
+      color: #ffffff;
     }
 
-    .photo-switch-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-gray);
-      font-family: var(--font-body);
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 6px 12px;
-      border-radius: 100px;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    .btn-blue:hover {
+      background-color: #1d4ed8;
     }
 
-    .photo-switch-btn.active {
-      background: var(--crimson);
-      color: var(--text-white);
-      box-shadow: 0 0 12px var(--crimson-glow);
+    .btn-dark {
+      background-color: #1f2937;
+      color: #e5e7eb;
+      border: 1px solid #374151;
     }
 
-    /* Coluna Direita: Estatísticas */
-    .hero-right {
-      display: flex;
-      flex-direction: column;
-      gap: clamp(24px, 4vw, 36px);
-      align-items: flex-start;
+    .btn-dark:hover {
+      background-color: #374151;
+      color: #ffffff;
     }
 
-    .editorial-stat {
-      border-left: 2px solid var(--border-subtle);
-      padding-left: clamp(14px, 2.5vw, 20px);
-      transition: var(--transition);
+    /* ================= RESUMO / DESTAQUES ================= */
+    .highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      padding: 30px 0;
+      border-bottom: 1px solid #1f2937;
     }
 
-    .editorial-stat:hover {
-      border-left-color: var(--crimson);
+    .highlight-card {
+      background-color: #111827;
+      border: 1px solid #1f2937;
+      padding: 20px;
+      border-radius: 8px;
     }
 
-    .editorial-stat .num {
-      font-family: var(--font-display);
-      font-size: clamp(2.4rem, 4.5vw, 3.4rem);
-      line-height: 1;
-      color: var(--crimson);
-      letter-spacing: 0.02em;
+    .highlight-num {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #38bdf8;
       margin-bottom: 4px;
     }
 
-    .editorial-stat .label {
-      font-size: clamp(0.72rem, 1.4vw, 0.8rem);
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: var(--text-gray);
-      text-transform: uppercase;
-      line-height: 1.4;
+    .highlight-desc {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      font-weight: 500;
     }
 
-    /* ================= Section Header Editorial ================= */
-    .section-header-editorial {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      padding: clamp(30px, 5vw, 50px) 0 clamp(20px, 3vw, 30px);
-      border-top: 1px solid var(--border-subtle);
-      margin-top: clamp(20px, 4vw, 40px);
-      flex-wrap: wrap;
-      gap: 16px;
+    /* ================= PROJETOS ================= */
+    .section {
+      padding: 50px 0;
+      border-bottom: 1px solid #1f2937;
     }
 
-    .section-header-editorial h2 {
-      font-family: var(--font-display);
-      font-size: clamp(1.8rem, 3.6vw, 2.6rem);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--text-white);
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
     }
 
-    .section-header-editorial a {
-      font-size: clamp(0.72rem, 1.5vw, 0.8rem);
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--crimson);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: var(--transition);
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      margin-bottom: 30px;
     }
 
-    .section-header-editorial a:hover {
-      color: var(--crimson-hover);
-      transform: translateX(4px);
-    }
-
-    /* ================= Projects Editorial Grid ================= */
-    .projects-editorial-grid {
+    .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: clamp(20px, 3vw, 28px);
-      margin-bottom: clamp(40px, 6vw, 80px);
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
     }
 
-    .project-card-editorial {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius);
-      overflow: hidden;
+    .project-card {
+      background-color: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
-      transition: var(--transition);
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s;
     }
 
-    .project-card-editorial:hover {
-      border-color: var(--crimson-border);
-      transform: translateY(-6px);
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 25px rgba(229, 9, 20, 0.14);
-    }
-
-    .project-thumb {
-      position: relative;
-      height: 175px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .project-thumb-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      transition: transform 0.4s ease;
-    }
-
-    .project-card-editorial:hover .project-thumb-bg {
-      transform: scale(1.05);
-    }
-
-    .project-thumb-content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .project-thumb-title {
-      font-family: var(--font-display);
-      font-size: clamp(1.4rem, 2.5vw, 1.8rem);
-      letter-spacing: 0.05em;
-      color: var(--text-white);
-      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
-    }
-
-    .project-thumb-subtitle {
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.16em;
-      color: var(--crimson);
-      text-transform: uppercase;
-      margin-top: 4px;
-    }
-
-    .project-meta-bar {
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-
-    .project-index-row {
-      display: flex;
-      align-items: baseline;
-      gap: 14px;
-      margin-bottom: 12px;
-    }
-
-    .project-idx {
-      font-family: var(--font-display);
-      font-size: 1.6rem;
-      color: var(--crimson);
-      line-height: 1;
-    }
-
-    .project-info-stack {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .project-name {
-      font-size: 1rem;
-      font-weight: 800;
-      color: var(--text-white);
-      letter-spacing: 0.02em;
+    .project-card:hover {
+      transform: translateY(-3px);
+      border-color: #3b82f6;
     }
 
     .project-type {
-      font-size: 0.68rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
       text-transform: uppercase;
-      margin-top: 2px;
+      letter-spacing: 0.05em;
+      color: #38bdf8;
+      margin-bottom: 8px;
     }
 
-    .project-brief {
-      font-size: 0.86rem;
-      color: var(--text-gray);
-      line-height: 1.55;
+    .project-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    .project-desc {
+      font-size: 0.88rem;
+      color: #94a3b8;
       margin-bottom: 18px;
-      flex-grow: 1;
+      line-height: 1.5;
     }
 
-    .project-tags {
+    .tech-list {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       margin-bottom: 20px;
     }
 
-    .project-tags span {
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      color: var(--text-gray);
+    .tech-tag {
+      background-color: #1e293b;
+      color: #cbd5e1;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 500;
     }
 
-    .project-link-btn {
+    .project-link {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-white);
-      text-decoration: none;
-      transition: var(--transition);
+      color: #38bdf8;
+      font-size: 0.85rem;
+      font-weight: 600;
       margin-top: auto;
     }
 
-    .project-link-btn i {
-      color: var(--crimson);
-      transition: transform 0.2s;
+    .project-link:hover {
+      text-decoration: underline;
     }
 
-    .project-link-btn:hover {
-      color: var(--crimson);
-    }
-
-    .project-link-btn:hover i {
-      transform: translateX(4px);
-    }
-
-    /* ================= Split Editorial Grid (3 Colunas) ================= */
-    .split-editorial-grid {
+    /* ================= HABILIDADES ================= */
+    .skills-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: clamp(20px, 3vw, 32px);
-      margin-bottom: clamp(50px, 8vw, 90px);
-    }
-
-    .col-editorial {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius);
-      padding: clamp(22px, 3vw, 32px);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .col-editorial h3 {
-      font-family: var(--font-display);
-      font-size: 1.4rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--text-white);
-      margin-bottom: 22px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    /* Educação e Skills */
-    .sub-label {
-      font-size: 0.7rem;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      color: var(--crimson);
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-
-    .edu-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px dashed var(--border-subtle);
-    }
-
-    .edu-title {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--text-white);
-      line-height: 1.35;
-    }
-
-    .edu-place {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-
-    .edu-year {
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: var(--crimson);
-      white-space: nowrap;
-      margin-left: 10px;
-    }
-
-    .skills-pills-editorial {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-    }
-
-    .skills-pills-editorial span {
-      font-size: 0.68rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      padding: 5px 11px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      color: var(--text-gray);
-      transition: var(--transition);
-    }
-
-    .skills-pills-editorial span:hover {
-      border-color: var(--crimson);
-      color: var(--text-white);
-    }
-
-    /* Work Process */
-    .process-list {
-      display: flex;
-      flex-direction: column;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 16px;
     }
 
-    .process-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-
-    .process-num {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      color: var(--crimson);
-      line-height: 1;
-      width: 24px;
-      flex-shrink: 0;
-    }
-
-    .process-icon {
-      width: 32px;
-      height: 32px;
+    .skill-box {
+      background-color: #111827;
+      border: 1px solid #1f2937;
       border-radius: 8px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--crimson);
-      font-size: 0.85rem;
-      flex-shrink: 0;
+      padding: 20px;
     }
 
-    .process-text h4 {
-      font-size: 0.84rem;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      color: var(--text-white);
-      text-transform: uppercase;
-      margin-bottom: 2px;
-    }
-
-    .process-text p {
-      font-size: 0.76rem;
-      color: var(--text-gray);
-      line-height: 1.4;
-    }
-
-    /* Quote Card Vermelho */
-    .quote-card-crimson {
-      background: linear-gradient(145deg, #a5070e, #5a0408);
-      border-radius: var(--radius);
-      padding: clamp(24px, 3.5vw, 36px);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 16px 40px rgba(229, 9, 20, 0.28);
-    }
-
-    .quote-mark {
-      font-family: var(--font-display);
-      font-size: 4rem;
-      line-height: 0.8;
-      color: rgba(255, 255, 255, 0.4);
-      margin-bottom: 10px;
-    }
-
-    .quote-text {
-      font-size: clamp(1rem, 2vw, 1.15rem);
-      font-weight: 600;
+    .skill-title {
+      font-size: 0.95rem;
+      font-weight: 700;
       color: #ffffff;
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
-
-    .quote-sign {
-      font-family: var(--font-hand);
-      font-size: 2.2rem;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-
-    .quote-bottom-tag {
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      color: rgba(255, 255, 255, 0.85);
-      text-transform: uppercase;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    /* ================= Let's Work Together ================= */
-    .work-together-editorial {
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: clamp(30px, 5vw, 60px);
-      align-items: center;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius);
-      padding: clamp(30px, 5vw, 56px);
-      margin-bottom: clamp(40px, 6vw, 80px);
+    .skill-title i {
+      color: #3b82f6;
     }
 
-    .work-together-title {
-      font-family: var(--font-display);
-      font-size: clamp(2.4rem, 5vw, 3.8rem);
-      line-height: 0.95;
-      letter-spacing: 0.02em;
-      color: var(--text-white);
-      margin-bottom: 18px;
-      text-transform: uppercase;
-    }
-
-    .work-together-title span {
-      color: var(--crimson);
-    }
-
-    .work-together-desc {
-      font-size: 0.92rem;
-      color: var(--text-gray);
-      line-height: 1.6;
-      margin-bottom: 28px;
-      max-width: 480px;
-    }
-
-    .contact-channels-editorial {
+    .skill-pills {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .skill-pill {
+      background-color: #1e293b;
+      font-size: 0.8rem;
+      color: #e2e8f0;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    /* ================= CONTATO ================= */
+    .contact-container {
+      background-color: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      padding: 36px 24px;
+      text-align: center;
+    }
+
+    .contact-container h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .contact-container p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      max-width: 600px;
+      margin: 0 auto 24px;
+    }
+
+    .contact-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
       gap: 12px;
     }
 
-    .contact-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-size: 0.86rem;
-      font-weight: 700;
-      color: var(--text-white);
-      text-decoration: none;
-      padding: 12px 18px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      transition: var(--transition);
-    }
-
-    .contact-row i {
-      font-size: 1.1rem;
-      color: var(--crimson);
-      width: 22px;
-      text-align: center;
-    }
-
-    .contact-row:hover {
-      border-color: var(--crimson);
-      transform: translateX(6px);
-      background: var(--bg-card-hover);
-    }
-
-    /* Mockup Laptop */
-    .work-device-preview {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .laptop-mockup-editorial {
-      width: 100%;
-      max-width: 440px;
-      background: #0d0d12;
-      border: 2px solid #282835;
-      border-radius: 12px 12px 2px 2px;
-      padding: 16px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
-      position: relative;
-    }
-
-    .laptop-mockup-editorial::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: -20px;
-      right: -20px;
-      height: 10px;
-      background: #1e1e28;
-      border-radius: 0 0 10px 10px;
-      border-top: 2px solid #333344;
-    }
-
-    .laptop-inner {
-      background: #060608;
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      height: 220px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
-      background-image: radial-gradient(circle at 50% 50%, rgba(229, 9, 20, 0.18), transparent 70%);
-    }
-
-    .laptop-brand {
-      font-family: var(--font-display);
-      font-size: 1.6rem;
-      letter-spacing: 0.08em;
-      color: var(--text-white);
-      margin-bottom: 6px;
-    }
-
-    .laptop-sub {
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.16em;
-      color: var(--crimson);
-      text-transform: uppercase;
-    }
-
-    /* ================= Footer ================= */
-    .editorial-footer {
-      border-top: 1px solid var(--border-subtle);
+    /* ================= FOOTER ================= */
+    footer {
       padding: 30px 0;
       text-align: center;
-      font-size: 0.74rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      text-transform: uppercase;
+      font-size: 0.85rem;
+      color: #6b7280;
     }
 
-    /* ================= RESPONSIVIDADE ULTRA POLIDA ================= */
-    @media (max-width: 1024px) {
-      .hero-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 32px;
+    @media (max-width: 640px) {
+      nav {
+        display: none;
       }
-      .hero-right {
-        grid-column: span 2;
-        flex-direction: row;
-        justify-content: space-between;
-        width: 100%;
-        border-top: 1px solid var(--border-subtle);
-        padding-top: 28px;
+      .hero {
+        padding: 40px 0 30px;
       }
-      .split-editorial-grid {
-        grid-template-columns: 1fr;
-      }
-      .work-together-editorial {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .hero-grid {
-        grid-template-columns: 1fr;
+      .hero-layout {
+        flex-direction: column-reverse;
         text-align: center;
+        gap: 24px;
       }
-      .hero-left {
-        align-items: center;
+      .hero-actions {
+        justify-content: center;
       }
-      .hero-bio {
-        max-width: 100%;
+      .profile-photo {
+        width: 140px;
+        height: 140px;
+        margin: 0 auto;
       }
-      .hero-quote-tag {
-        position: static;
-        margin-top: 14px;
-        max-width: 100%;
-      }
-      .portrait-frame {
-        max-width: 310px;
-        height: 380px;
-      }
-      .hero-right {
-        grid-column: span 1;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-      }
-      .editorial-stat {
-        border-left: none;
-        border-bottom: 2px solid var(--border-subtle);
-        padding-left: 0;
-        padding-bottom: 12px;
-        width: 100%;
-        text-align: center;
-      }
-      .projects-editorial-grid {
+      .projects-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -938,477 +432,309 @@
 </head>
 <body>
 
-  <!-- Top Bar Minimalista -->
-  <div class="container">
-    <header class="topbar">
-      <div>FULL STACK & MOBILE ENGINEER</div>
-      <div class="status">
-        <span class="status-dot"></span>
-        AVAILABLE FOR FREELANCE & FULL-TIME
+  <!-- TOPO -->
+  <header>
+    <div class="wrapper header-content">
+      <a href="#" class="logo">
+        <i class="fa-solid fa-terminal"></i> Marcos<span>Vinícius</span>
+      </a>
+      <nav>
+        <a href="#projetos">Projetos</a>
+        <a href="#habilidades">Habilidades</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#contato">Contato</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- APRESENTAÇÃO -->
+  <section class="hero">
+    <div class="wrapper">
+      <div class="hero-layout">
+        <div class="hero-text">
+          <div class="badge-status">
+            <span class="circle"></span> Disponível para oportunidades profissionais
+          </div>
+          <h1>Desenvolvedor Full Stack & Mobile</h1>
+          <p class="lead-text">
+            Estudante de Análise e Desenvolvimento de Sistemas. Construo sistemas completos, aplicativos móveis e soluções corporativas com foco em organização de código, segurança e desempenho.
+          </p>
+          <div class="hero-actions">
+            <a href="#projetos" class="btn btn-blue">
+              <i class="fa-solid fa-code"></i> Ver Projetos
+            </a>
+            <a href="https://github.com/eusantosmarcos123-ui" target="_blank" rel="noopener noreferrer" class="btn btn-dark">
+              <i class="fa-brands fa-github"></i> Perfil no GitHub
+            </a>
+            <a href="#contato" class="btn btn-dark">
+              <i class="fa-solid fa-envelope"></i> Contato
+            </a>
+          </div>
+        </div>
+
+        <!-- CAMPO DA SUA FOTO DE PERFIL -->
+        <div class="hero-avatar-wrapper">
+          <div class="profile-photo">
+            <img src="foto-perfil.jpg" alt="Foto de Marcos Vinícius" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="photo-fallback" style="display: none;">
+              <i class="fa-solid fa-user"></i>
+            </div>
+          </div>
+        </div>
       </div>
-    </header>
+    </div>
+  </section>
+
+  <!-- RESUMO DE NÚMEROS -->
+  <div class="wrapper">
+    <div class="highlights">
+      <div class="highlight-card">
+        <div class="highlight-num">+10</div>
+        <div class="highlight-desc">Projetos com código no GitHub</div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-num">Full Stack</div>
+        <div class="highlight-desc">Aplicações Web, Backend e Mobile</div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-num">Seguro</div>
+        <div class="highlight-desc">Credenciais e .env 100% protegidos</div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-num">ADS</div>
+        <div class="highlight-desc">Graduação Tecnológica em Curso</div>
+      </div>
+    </div>
   </div>
 
-  <!-- Hero Editorial Section -->
-  <section class="hero-editorial">
-    <!-- Texto Gigante Vermelho ao Fundo (Watermark) -->
-    <div class="watermark-bg">PORTFOLIO</div>
+  <!-- PROJETOS -->
+  <section class="section" id="projetos">
+    <div class="wrapper">
+      <h2 class="section-title">Projetos Desenvolvidos</h2>
+      <p class="section-subtitle">Aplicações práticas com código-fonte aberto para avaliação técnica.</p>
 
-    <div class="container hero-grid">
-      <!-- Coluna da Esquerda: Nome e Apresentação -->
-      <div class="hero-left">
-        <div class="hero-handwrite">Olá, eu sou</div>
-        <h1 class="hero-name">MARCOS<br>VINÍCIUS</h1>
-        <div class="hero-role-badge">SOFTWARE ENGINEER & ADS STUDENT</div>
-        <p class="hero-bio">
-          Desenvolvo arquiteturas modernas de ponta a ponta, unindo engenharia robusta, design funcional e foco rigoroso em performance e segurança.
-        </p>
-        <div class="badge-location">
-          <i class="fa-solid fa-earth-americas"></i> DISPONÍVEL GLOBALMENTE & REMOTO
+      <div class="projects-grid">
+
+        <!-- Projeto 1 -->
+        <div class="project-card">
+          <div>
+            <div class="project-type">Mobile Android</div>
+            <div class="project-name">Chef de Despensa</div>
+            <p class="project-desc">
+              Aplicativo nativo para controle de despensa e validade de alimentos com banco SQLite/Room, consumo de API Retrofit e sugestão de receitas.
+            </p>
+            <div class="tech-list">
+              <span class="tech-tag">Java</span>
+              <span class="tech-tag">Android SDK</span>
+              <span class="tech-tag">Room DB</span>
+              <span class="tech-tag">Retrofit</span>
+            </div>
+          </div>
+          <a href="https://github.com/eusantosmarcos123-ui/chef-de-despensa" target="_blank" rel="noopener noreferrer" class="project-link">
+            <i class="fa-brands fa-github"></i> Acessar Repositório &rarr;
+          </a>
         </div>
-      </div>
 
-      <!-- Coluna Central: Retrato Editorial Oficial -->
-      <div class="hero-center">
-        <div class="portrait-frame">
-          <img src="foto-editorial-marcos.jpg" alt="Marcos Vinícius - Software Engineer" class="portrait-img" id="heroPortraitImg">
-          <div class="hero-quote-tag">
-            <p>Transformando ideias em soluções digitais de alto impacto.</p>
+        <!-- Projeto 2 -->
+        <div class="project-card">
+          <div>
+            <div class="project-type">Web & PWA</div>
+            <div class="project-name">SmartPDV Omnichannel</div>
+            <p class="project-desc">
+              Sistema de Ponto de Venda moderno com arquitetura offline-first, leitor de código de barras e impressão térmica de comprovantes.
+            </p>
+            <div class="tech-list">
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">TypeScript</span>
+              <span class="tech-tag">Tailwind</span>
+              <span class="tech-tag">PWA</span>
+            </div>
+          </div>
+          <a href="https://github.com/eusantosmarcos123-ui/smartpdv-omnichannel" target="_blank" rel="noopener noreferrer" class="project-link">
+            <i class="fa-brands fa-github"></i> Acessar Repositório &rarr;
+          </a>
+        </div>
+
+        <!-- Projeto 3 -->
+        <div class="project-card">
+          <div>
+            <div class="project-type">Mobile & Web</div>
+            <div class="project-name">Foco nos Estudos</div>
+            <p class="project-desc">
+              Plataforma de produtividade e foco com checklist gamer, sistema de pontos/XP e ciclo Pomodoro integrado para estudantes.
+            </p>
+            <div class="tech-list">
+              <span class="tech-tag">React Native</span>
+              <span class="tech-tag">Flutter</span>
+              <span class="tech-tag">Expo</span>
+              <span class="tech-tag">JavaScript</span>
+            </div>
+          </div>
+          <a href="https://github.com/eusantosmarcos123-ui/foco-estudos-app" target="_blank" rel="noopener noreferrer" class="project-link">
+            <i class="fa-brands fa-github"></i> Acessar Repositório &rarr;
+          </a>
+        </div>
+
+        <!-- Projeto 4 -->
+        <div class="project-card">
+          <div>
+            <div class="project-type">Full Stack</div>
+            <div class="project-name">SIGRH-Ponto</div>
+            <p class="project-desc">
+              Sistema para departamento de Recursos Humanos com registro de ponto eletrônico, relógio digital em tempo real e relatórios de jornada.
+            </p>
+            <div class="tech-list">
+              <span class="tech-tag">Node.js</span>
+              <span class="tech-tag">Express</span>
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">REST API</span>
+            </div>
+          </div>
+          <a href="https://github.com/eusantosmarcos123-ui/projeto-sigrh-ponto" target="_blank" rel="noopener noreferrer" class="project-link">
+            <i class="fa-brands fa-github"></i> Acessar Repositório &rarr;
+          </a>
+        </div>
+
+        <!-- Projeto 5 -->
+        <div class="project-card">
+          <div>
+            <div class="project-type">Full Stack NoSQL</div>
+            <div class="project-name">StockVision</div>
+            <p class="project-desc">
+              Plataforma de controle de inventário empresarial, cálculo de demanda e módulo de logística reversa (ESG) com autenticação JWT.
+            </p>
+            <div class="tech-list">
+              <span class="tech-tag">Node.js</span>
+              <span class="tech-tag">Express</span>
+              <span class="tech-tag">MongoDB</span>
+              <span class="tech-tag">JWT</span>
+            </div>
+          </div>
+          <a href="https://github.com/eusantosmarcos123-ui/Stockvision" target="_blank" rel="noopener noreferrer" class="project-link">
+            <i class="fa-brands fa-github"></i> Acessar Repositório &rarr;
+          </a>
+        </div>
+
+        <!-- Projeto 6 -->
+        <div class="project-card">
+          <div>
+            <div class="project-type">Full Stack Web</div>
+            <div class="project-name">Recôncavo Prime</div>
+            <p class="project-desc">
+              Portal imobiliário completo com visualizador panorâmico em 360°, busca com múltiplos filtros e painel administrativo de corretores.
+            </p>
+            <div class="tech-list">
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">TypeScript</span>
+              <span class="tech-tag">Node.js</span>
+              <span class="tech-tag">Vite</span>
+            </div>
+          </div>
+          <a href="https://github.com/eusantosmarcos123-ui/reconcavo-prime-frontend" target="_blank" rel="noopener noreferrer" class="project-link">
+            <i class="fa-brands fa-github"></i> Acessar Repositório &rarr;
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HABILIDADES -->
+  <section class="section" id="habilidades">
+    <div class="wrapper">
+      <h2 class="section-title">Habilidades Técnicas</h2>
+      <p class="section-subtitle">Principais ferramentas e tecnologias que utilizo no desenvolvimento diário.</p>
+
+      <div class="skills-grid">
+        <div class="skill-box">
+          <div class="skill-title"><i class="fa-brands fa-react"></i> Frontend</div>
+          <div class="skill-pills">
+            <span class="skill-pill">React</span>
+            <span class="skill-pill">TypeScript</span>
+            <span class="skill-pill">JavaScript</span>
+            <span class="skill-pill">HTML5 / CSS3</span>
+            <span class="skill-pill">Tailwind CSS</span>
+            <span class="skill-pill">PWA</span>
           </div>
         </div>
-      </div>
 
-      <!-- Coluna da Direita: Estatísticas Editoriais -->
-      <div class="hero-right">
-        <div class="editorial-stat">
-          <div class="num">+10</div>
-          <div class="label">PROJETOS COMPLETOS<br>& VERSIONADOS</div>
+        <div class="skill-box">
+          <div class="skill-title"><i class="fa-solid fa-server"></i> Backend</div>
+          <div class="skill-pills">
+            <span class="skill-pill">Node.js</span>
+            <span class="skill-pill">Express</span>
+            <span class="skill-pill">Java</span>
+            <span class="skill-pill">REST APIs</span>
+            <span class="skill-pill">JWT</span>
+          </div>
         </div>
-        <div class="editorial-stat">
-          <div class="num">100%</div>
-          <div class="label">FULL STACK<br>WEB & MOBILE</div>
+
+        <div class="skill-box">
+          <div class="skill-title"><i class="fa-solid fa-mobile-screen"></i> Mobile</div>
+          <div class="skill-pills">
+            <span class="skill-pill">Android Nativo</span>
+            <span class="skill-pill">Flutter</span>
+            <span class="skill-pill">React Native</span>
+            <span class="skill-pill">Expo</span>
+          </div>
         </div>
-        <div class="editorial-stat">
-          <div class="num">ADS</div>
-          <div class="label">ANÁLISE E DESENV.<br>DE SISTEMAS</div>
+
+        <div class="skill-box">
+          <div class="skill-title"><i class="fa-solid fa-database"></i> Banco & Ferramentas</div>
+          <div class="skill-pills">
+            <span class="skill-pill">MongoDB</span>
+            <span class="skill-pill">SQLite</span>
+            <span class="skill-pill">Git / GitHub</span>
+            <span class="skill-pill">Linux</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Projetos em Destaque (Selected Projects) -->
-  <section class="container">
-    <div class="section-header-editorial">
-      <h2>SELECTED PROJECTS</h2>
-      <a href="https://github.com/eusantosmarcos123-ui?tab=repositories" target="_blank" rel="noopener noreferrer">
-        VIEW ALL PROJECTS <i class="fa-solid fa-arrow-right"></i>
-      </a>
-    </div>
-
-    <div class="projects-editorial-grid">
-
-      <!-- Projeto 01: Chef de Despensa (Android Nativo) -->
-      <article class="project-card-editorial">
-        <div class="project-thumb">
-          <div class="project-thumb-bg" style="background-color: #1a150f;"></div>
-          <div class="project-thumb-content">
-            <div class="project-thumb-title">CHEF DE DESPENSA</div>
-            <div class="project-thumb-subtitle">NATIVE ANDROID & ANTI-WASTE</div>
-          </div>
-        </div>
-        <div class="project-meta-bar">
-          <div class="project-index-row">
-            <span class="project-idx">01</span>
-            <div class="project-info-stack">
-              <div class="project-name">CHEF DE DESPENSA</div>
-              <div class="project-type">ANDROID NATIVO & ROOM SQLITE</div>
-            </div>
-          </div>
-          <p class="project-brief">
-            Aplicativo nativo para combate ao desperdício de alimentos. Gerenciamento de despensa, integração REST TheMealDB para sugestão inteligente de receitas, persistência Room e APK gerado.
-          </p>
-          <div class="project-tags">
-            <span>Java</span>
-            <span>Android SDK</span>
-            <span>Room SQLite</span>
-            <span>Retrofit</span>
-          </div>
-          <a href="../ChefDeDespensa" target="_blank" rel="noopener noreferrer" class="project-link-btn">
-            EXPLORE CODE & APK <i class="fa-solid fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-      <!-- Projeto 02: StockVision -->
-      <article class="project-card-editorial">
-        <div class="project-thumb">
-          <div class="project-thumb-bg" style="background-color: #1a0f12;"></div>
-          <div class="project-thumb-content">
-            <div class="project-thumb-title">STOCKVISION</div>
-            <div class="project-thumb-subtitle">ENTERPRISE SUPPLY & ESG</div>
-          </div>
-        </div>
-        <div class="project-meta-bar">
-          <div class="project-index-row">
-            <span class="project-idx">02</span>
-            <div class="project-info-stack">
-              <div class="project-name">STOCKVISION</div>
-              <div class="project-type">FULL STACK & NOSQL PLATFORM</div>
-            </div>
-          </div>
-          <p class="project-brief">
-            Gestão inteligente de inventário, autenticação JWT robusta, previsibilidade de estoque e logística reversa integrada.
-          </p>
-          <div class="project-tags">
-            <span>Node.js</span>
-            <span>Express</span>
-            <span>MongoDB</span>
-          </div>
-          <a href="https://github.com/eusantosmarcos123-ui/Stockvision" target="_blank" rel="noopener noreferrer" class="project-link-btn">
-            EXPLORE CODE <i class="fa-solid fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-      <!-- Projeto 03: SmartPDV -->
-      <article class="project-card-editorial">
-        <div class="project-thumb">
-          <div class="project-thumb-bg" style="background-color: #12151c;"></div>
-          <div class="project-thumb-content">
-            <div class="project-thumb-title">SMARTPDV</div>
-            <div class="project-thumb-subtitle">OMNICHANNEL PWA</div>
-          </div>
-        </div>
-        <div class="project-meta-bar">
-          <div class="project-index-row">
-            <span class="project-idx">03</span>
-            <div class="project-info-stack">
-              <div class="project-name">SMARTPDV OMNICHANNEL</div>
-              <div class="project-type">REACT & OFFLINE-FIRST PWA</div>
-            </div>
-          </div>
-          <p class="project-brief">
-            Ponto de venda moderno de alta agilidade com impressão térmica, leitor de código de barras e sincronização local.
-          </p>
-          <div class="project-tags">
-            <span>React</span>
-            <span>TypeScript</span>
-            <span>Tailwind</span>
-          </div>
-          <a href="https://github.com/eusantosmarcos123-ui/smartpdv-omnichannel" target="_blank" rel="noopener noreferrer" class="project-link-btn">
-            EXPLORE CODE <i class="fa-solid fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-      <!-- Projeto 04: Foco nos Estudos (CheckList Gamer) -->
-      <article class="project-card-editorial">
-        <div class="project-thumb">
-          <div class="project-thumb-bg" style="background-color: #101416;"></div>
-          <div class="project-thumb-content">
-            <div class="project-thumb-title">FOCO NOS ESTUDOS</div>
-            <div class="project-thumb-subtitle">GAMIFIED PRODUCTIVITY</div>
-          </div>
-        </div>
-        <div class="project-meta-bar">
-          <div class="project-index-row">
-            <span class="project-idx">04</span>
-            <div class="project-info-stack">
-              <div class="project-name">CHECKLIST GAMER & FOCO</div>
-              <div class="project-type">CROSS-PLATFORM MOBILE & WEB</div>
-            </div>
-          </div>
-          <p class="project-brief">
-            Ecossistema de produtividade, gamificação com checklist gamer, sistema de XP, metas diárias e ciclo Pomodoro dinâmico.
-          </p>
-          <div class="project-tags">
-            <span>React Native</span>
-            <span>Flutter</span>
-            <span>Expo</span>
-            <span>JavaScript</span>
-          </div>
-          <a href="https://github.com/eusantosmarcos123-ui/foco-estudos-app" target="_blank" rel="noopener noreferrer" class="project-link-btn">
-            EXPLORE CODE <i class="fa-solid fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-      <!-- Projeto 05: SIGRH-Ponto -->
-      <article class="project-card-editorial">
-        <div class="project-thumb">
-          <div class="project-thumb-bg" style="background-color: #141113;"></div>
-          <div class="project-thumb-content">
-            <div class="project-thumb-title">SIGRH-PONTO</div>
-            <div class="project-thumb-subtitle">HR & DIGITAL CLOCKING</div>
-          </div>
-        </div>
-        <div class="project-meta-bar">
-          <div class="project-index-row">
-            <span class="project-idx">05</span>
-            <div class="project-info-stack">
-              <div class="project-name">SIGRH-PONTO</div>
-              <div class="project-type">ENTERPRISE HR SYSTEM</div>
-            </div>
-          </div>
-          <p class="project-brief">
-            Controle de jornada e ponto eletrônico corporativo com relógio sincronizado em tempo real, painel de relatórios e autenticação.
-          </p>
-          <div class="project-tags">
-            <span>Node.js</span>
-            <span>Express</span>
-            <span>JavaScript</span>
-            <span>CSS3</span>
-          </div>
-          <a href="https://github.com/eusantosmarcos123-ui/projeto-sigrh-ponto" target="_blank" rel="noopener noreferrer" class="project-link-btn">
-            EXPLORE CODE <i class="fa-solid fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-      <!-- Projeto 06: Recôncavo Prime -->
-      <article class="project-card-editorial">
-        <div class="project-thumb">
-          <div class="project-thumb-bg" style="background-color: #181212;"></div>
-          <div class="project-thumb-content">
-            <div class="project-thumb-title">RECÔNCAVO PRIME</div>
-            <div class="project-thumb-subtitle">REAL ESTATE & 360° TOUR</div>
-          </div>
-        </div>
-        <div class="project-meta-bar">
-          <div class="project-index-row">
-            <span class="project-idx">06</span>
-            <div class="project-info-stack">
-              <div class="project-name">RECÔNCAVO PRIME</div>
-              <div class="project-type">FRONTEND & BACKEND ARCHITECTURE</div>
-            </div>
-          </div>
-          <p class="project-brief">
-            Plataforma imobiliária com busca interativa, tours imersivos em 360°, painel de corretores e integração de leads.
-          </p>
-          <div class="project-tags">
-            <span>React</span>
-            <span>TypeScript</span>
-            <span>Node.js</span>
-          </div>
-          <a href="https://github.com/eusantosmarcos123-ui/reconcavo-prime-frontend" target="_blank" rel="noopener noreferrer" class="project-link-btn">
-            EXPLORE CODE <i class="fa-solid fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-      <!-- Projeto 07: Bahia Capital Simulator -->
-      <article class="project-card-editorial">
-        <div class="project-thumb">
-          <div class="project-thumb-bg" style="background-color: #171113;"></div>
-          <div class="project-thumb-content">
-            <div class="project-thumb-title">BAHIA CAPITAL</div>
-            <div class="project-thumb-subtitle">FINANCIAL SIMULATION</div>
-          </div>
-        </div>
-        <div class="project-meta-bar">
-          <div class="project-index-row">
-            <span class="project-idx">07</span>
-            <div class="project-info-stack">
-              <div class="project-name">BAHIA CAPITAL SIMULATOR</div>
-              <div class="project-type">ANALYTICS & FINANCIAL TOOL</div>
-            </div>
-          </div>
-          <p class="project-brief">
-            Motor de simulação macroeconômica e financeira com monitoramento de serviços em tempo real e banco de dados relacional.
-          </p>
-          <div class="project-tags">
-            <span>Node.js</span>
-            <span>JavaScript</span>
-            <span>SQLite</span>
-          </div>
-          <a href="https://github.com/eusantosmarcos123-ui/bahia-capital-simulator" target="_blank" rel="noopener noreferrer" class="project-link-btn">
-            EXPLORE CODE <i class="fa-solid fa-arrow-right"></i>
-          </a>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- Education, Work Process & Quote Editorial Grid -->
-  <section class="container">
-    <div class="split-editorial-grid">
-
-      <!-- Coluna 1: Formação & Habilidades -->
-      <div class="col-editorial">
-        <h3>EDUCATION & SKILLS</h3>
-        
-        <div class="sub-label">FORMAÇÃO</div>
-        <div class="edu-item">
-          <div>
-            <div class="edu-title">Análise e Desenvolvimento de Sistemas</div>
-            <div class="edu-place">Graduação Tecnológica</div>
-          </div>
-          <div class="edu-year">EM CURSO</div>
-        </div>
-
-        <div class="edu-item">
-          <div>
-            <div class="edu-title">Formação Full Stack & Mobile</div>
-            <div class="edu-place">Desenvolvimento Moderno Web & Mobile</div>
-          </div>
-          <div class="edu-year">PRÁTICO</div>
-        </div>
-
-        <div class="sub-label" style="margin-top: 24px;">SKILLS & TECNOLOGIAS</div>
-        <div class="skills-pills-editorial">
-          <span>JAVA</span>
-          <span>ANDROID SDK</span>
-          <span>ROOM SQLITE</span>
-          <span>REACT</span>
-          <span>TYPESCRIPT</span>
-          <span>NODE.JS</span>
-          <span>EXPRESS</span>
-          <span>MONGODB</span>
-          <span>SQLITE</span>
-          <span>FLUTTER</span>
-          <span>GIT & GITHUB</span>
-          <span>PWA</span>
-          <span>TAILWIND CSS</span>
-          <span>REST APIS</span>
-        </div>
-      </div>
-
-      <!-- Coluna 2: Work Process (Etapas de Trabalho) -->
-      <div class="col-editorial">
-        <h3>WORK PROCESS</h3>
-        <div class="process-list">
-          <div class="process-step">
-            <span class="process-num">01</span>
-            <div class="process-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-            <div class="process-text">
-              <h4>DISCOVER & MODEL</h4>
-              <p>Compreensão profunda dos requisitos de negócio e modelagem da arquitetura de dados.</p>
-            </div>
-          </div>
-
-          <div class="process-step">
-            <span class="process-num">02</span>
-            <div class="process-icon"><i class="fa-solid fa-lightbulb"></i></div>
-            <div class="process-text">
-              <h4>ARCHITECTURE</h4>
-              <p>Definição de rotas, segurança de APIs, persistência e estrutura limpa de código.</p>
-            </div>
-          </div>
-
-          <div class="process-step">
-            <span class="process-num">03</span>
-            <div class="process-icon"><i class="fa-solid fa-code"></i></div>
-            <div class="process-text">
-              <h4>DEVELOP</h4>
-              <p>Construção eficiente do frontend e backend com tipagem forte e validações.</p>
-            </div>
-          </div>
-
-          <div class="process-step">
-            <span class="process-num">04</span>
-            <div class="process-icon"><i class="fa-solid fa-shield-halved"></i></div>
-            <div class="process-text">
-              <h4>SECURE & TEST</h4>
-              <p>Auditoria de vulnerabilidades, blindagem de segredos (.env) e testes funcionais.</p>
-            </div>
-          </div>
-
-          <div class="process-step">
-            <span class="process-num">05</span>
-            <div class="process-icon"><i class="fa-solid fa-rocket"></i></div>
-            <div class="process-text">
-              <h4>DELIVER & DEPLOY</h4>
-              <p>Publicação, integração contínua e entrega de software pronto para produção.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Coluna 3: Red Quote Card Editorial -->
-      <div class="col-editorial">
-        <div class="quote-card-crimson">
-          <div>
-            <div class="quote-mark">“</div>
-            <div class="quote-text">
-              Bom software não é apenas como ele se parece visualmente. É sobre como ele funciona de maneira resiliente, segura e eficiente.
-            </div>
-          </div>
-          <div>
-            <div class="quote-sign">Marcos Vinícius</div>
-            <div class="quote-bottom-tag" style="margin-top: 14px;">
-              <span>VAMOS CRIAR ALGO EXCEPCIONAL</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Let's Work Together Section -->
-  <section class="container work-together-editorial">
-    <div>
-      <h2 class="work-together-title">VAMOS CRIAR<br><span>JUNTOS.</span></h2>
-      <p class="work-together-desc">
-        Estou disponível para novas oportunidades profissionais, vagas full-time e projetos inovadores. Entre em contato pelos canais diretos abaixo:
+  <!-- SOBRE -->
+  <section class="section" id="sobre">
+    <div class="wrapper">
+      <h2 class="section-title">Sobre Mim</h2>
+      <p class="lead-text" style="font-size: 1rem; margin-bottom: 16px;">
+        Sou estudante de Análise e Desenvolvimento de Sistemas com foco na construção de softwares práticos e bem estruturados. Possuo experiência prática no desenvolvimento de sistemas web com React e Node.js, aplicativos móveis com Java/Android e Flutter, além de modelagem de dados relacionais e NoSQL.
       </p>
-
-      <div class="contact-channels-editorial">
-        <a href="mailto:eusantosmarcos123@gmail.com" class="contact-row">
-          <i class="fa-solid fa-envelope"></i>
-          <span>eusantosmarcos123@gmail.com</span>
-        </a>
-        <a href="https://github.com/eusantosmarcos123-ui" target="_blank" rel="noopener noreferrer" class="contact-row">
-          <i class="fa-brands fa-github"></i>
-          <span>github.com/eusantosmarcos123-ui</span>
-        </a>
-        <a href="https://api.whatsapp.com/send?phone=5575999999999&text=Ol%C3%A1%20Marcos!%20Vi%20o%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener noreferrer" class="contact-row" id="whatsappDirect">
-          <i class="fa-brands fa-whatsapp"></i>
-          <span>Conversar no WhatsApp</span>
-        </a>
-        <a href="https://linkedin.com/in/marcos-vinicius" target="_blank" rel="noopener noreferrer" class="contact-row" id="linkedinDirect">
-          <i class="fa-brands fa-linkedin-in"></i>
-          <span>Conectar no LinkedIn</span>
-        </a>
-      </div>
+      <p class="lead-text" style="font-size: 1rem;">
+        Tenho compromisso com código limpo, boas práticas de segurança (sem exposição de credenciais ou dados sensíveis) e entrega pontual de funcionalidades.
+      </p>
     </div>
+  </section>
 
-    <!-- Laptop Mockup Preview -->
-    <div class="work-device-preview">
-      <div class="laptop-mockup-editorial">
-        <div class="laptop-inner">
-          <div class="laptop-brand">MARCOS VINÍCIUS</div>
-          <div class="laptop-sub">SOFTWARE ENGINEERING & CREATIVE TECH</div>
+  <!-- CONTATO -->
+  <section class="section" id="contato" style="border-bottom: none;">
+    <div class="wrapper">
+      <div class="contact-container">
+        <h2>Vamos conversar?</h2>
+        <p>Estou à disposição para entrevistas, vagas de estágio, oportunidades júnior e projetos freelance.</p>
+        <div class="contact-buttons">
+          <a href="mailto:eusantosmarcos123@gmail.com" class="btn btn-blue">
+            <i class="fa-solid fa-envelope"></i> Enviar E-mail
+          </a>
+          <a href="https://github.com/eusantosmarcos123-ui" target="_blank" rel="noopener noreferrer" class="btn btn-dark">
+            <i class="fa-brands fa-github"></i> GitHub
+          </a>
+          <a href="https://api.whatsapp.com/send?phone=5575999999999&text=Ol%C3%A1%20Marcos!%20Vi%20o%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener noreferrer" class="btn btn-dark">
+            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+          </a>
+          <a href="https://linkedin.com/in/marcos-vinicius" target="_blank" rel="noopener noreferrer" class="btn btn-dark">
+            <i class="fa-brands fa-linkedin"></i> LinkedIn
+          </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer Minimalista -->
-  <footer class="editorial-footer">
-    <div class="container">
-      <p>© 2026 MARCOS VINÍCIUS DOS SANTOS — DESIGN EDITORIAL & CÓDIGO NO GITHUB.</p>
+  <!-- RODAPÉ -->
+  <footer>
+    <div class="wrapper">
+      <p>&copy; 2026 Marcos Vinícius dos Santos. Todos os projetos com código no GitHub.</p>
     </div>
   </footer>
 
-  <script>
-    // Função para alternar entre as versões da foto no Hero
-    function switchPortrait(imageSrc, btnElement) {
-      const img = document.getElementById('heroPortraitImg');
-      if (img) {
-        img.style.opacity = '0';
-        setTimeout(() => {
-          img.src = imageSrc;
-          img.style.opacity = '1';
-        }, 180);
-      }
-      document.querySelectorAll('.photo-switch-btn').forEach(btn => btn.classList.remove('active'));
-      if (btnElement) {
-        btnElement.classList.add('active');
-      }
-    }
-  </script>
 </body>
 </html>
