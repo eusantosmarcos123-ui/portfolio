@@ -431,6 +431,112 @@
       user-select: all;
     }
 
+    /* ================= FORMAÇÃO, CURSOS E CERTIFICADOS ================= */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .edu-card {
+      background-color: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .edu-card:hover {
+      transform: translateY(-3px);
+      border-color: #3b82f6;
+    }
+
+    .edu-badge {
+      display: inline-block;
+      width: fit-content;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+
+    .badge-graduacao {
+      background-color: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .badge-curso {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-certificado {
+      background-color: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .edu-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .edu-institution {
+      font-size: 0.9rem;
+      color: #38bdf8;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .edu-details {
+      font-size: 0.88rem;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .edu-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid #1f2937;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    .edu-meta span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .edu-verify-link {
+      color: #38bdf8;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .edu-verify-link:hover {
+      text-decoration: underline;
+    }
+
     /* ================= FOOTER ================= */
     footer {
       padding: 30px 0;
@@ -476,6 +582,7 @@
       <nav>
         <a href="#projetos">Projetos</a>
         <a href="#habilidades">Habilidades</a>
+        <a href="#formacao">Formação & Cursos</a>
         <a href="#sobre">Sobre</a>
         <a href="#contato">Contato</a>
       </nav>
@@ -709,6 +816,72 @@
             <span class="skill-pill">Linux</span>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMAÇÃO, CURSOS E CERTIFICADOS -->
+  <section class="section" id="formacao">
+    <div class="wrapper">
+      <h2 class="section-title">Graduação, Cursos & Certificados</h2>
+      <p class="section-subtitle">Minha trajetória acadêmica, especializações técnicas e certificações profissionais.</p>
+
+      <div class="edu-grid">
+
+        <!-- 1. GRADUAÇÃO -->
+        <div class="edu-card">
+          <div>
+            <span class="edu-badge badge-graduacao">Graduação</span>
+            <h3 class="edu-title">Análise e Desenvolvimento de Sistemas (ADS)</h3>
+            <div class="edu-institution">
+              <i class="fa-solid fa-graduation-cap"></i> Ensino Superior Tecnológico
+            </div>
+            <p class="edu-details">
+              Formação com ênfase em engenharia de software, modelagem de dados relacionais e não-relacionais, arquitetura de sistemas web e mobile, e desenvolvimento seguro.
+            </p>
+          </div>
+          <div class="edu-meta">
+            <span><i class="fa-regular fa-calendar"></i> Em andamento</span>
+            <span style="color: #60a5fa; font-weight: 600;">Graduando</span>
+          </div>
+        </div>
+
+        <!-- 2. CURSOS DE ESPECIALIZAÇÃO -->
+        <div class="edu-card">
+          <div>
+            <span class="edu-badge badge-curso">Curso Profissionalizante</span>
+            <h3 class="edu-title">Desenvolvimento Full Stack & Mobile</h3>
+            <div class="edu-institution">
+              <i class="fa-solid fa-laptop-code"></i> Especialização Prática
+            </div>
+            <p class="edu-details">
+              Aprofundamento na construção de APIs com Node.js e Express, interfaces interativas com React e TypeScript, e criação de apps móveis com Flutter e Android nativo.
+            </p>
+          </div>
+          <div class="edu-meta">
+            <span><i class="fa-regular fa-clock"></i> Carga Horária: Intensivo</span>
+            <span style="color: #34d399; font-weight: 600;">Concluído</span>
+          </div>
+        </div>
+
+        <!-- 3. CERTIFICADOS -->
+        <div class="edu-card">
+          <div>
+            <span class="edu-badge badge-certificado">Certificado Técnico</span>
+            <h3 class="edu-title">Boas Práticas de Código & Arquitetura Segura</h3>
+            <div class="edu-institution">
+              <i class="fa-solid fa-award"></i> Certificação Técnica
+            </div>
+            <p class="edu-details">
+              Certificação cobrindo padrões RESTful, autenticação via JWT, blindagem de credenciais sensíveis (.env), segurança em banco de dados e versionamento avançado com Git.
+            </p>
+          </div>
+          <div class="edu-meta">
+            <span><i class="fa-solid fa-certificate"></i> Credencial Verificada</span>
+            <span class="edu-verify-link">Ativo <i class="fa-solid fa-check"></i></span>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
