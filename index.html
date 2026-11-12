@@ -537,6 +537,106 @@
       text-decoration: underline;
     }
 
+    /* ================= CERTIFICADOS COM FOTO/DOCUMENTO ================= */
+    .cert-preview-box {
+      width: 100%;
+      height: 180px;
+      border-radius: 6px;
+      border: 1px dashed #334155;
+      background-color: #0b0f17;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cert-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .cert-img:hover {
+      transform: scale(1.03);
+    }
+
+    .cert-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 14px;
+      gap: 6px;
+    }
+
+    .cert-placeholder i {
+      font-size: 2rem;
+      color: #3b82f6;
+    }
+
+    .btn-cert-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      color: #38bdf8;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .btn-cert-action:hover {
+      background-color: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+    }
+
+    /* Modal / Visualizador de Certificado em Tela Cheia */
+    .cert-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .cert-modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      border: 1px solid #334155;
+    }
+
+    .cert-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
     /* ================= FOOTER ================= */
     footer {
       padding: 30px 0;
@@ -824,67 +924,166 @@
   <section class="section" id="formacao">
     <div class="wrapper">
       <h2 class="section-title">Graduação, Cursos & Certificados</h2>
-      <p class="section-subtitle">Minha trajetória acadêmica, especializações técnicas e certificações profissionais.</p>
+      <p class="section-subtitle">Minha trajetória acadêmica, especializações técnicas e certificações com comprovantes.</p>
 
-      <div class="edu-grid">
+      <!-- 1. BLOCO DE TEXTO: GRADUAÇÕES E CURSOS -->
+      <h3 style="font-size: 1.15rem; color: #ffffff; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-graduation-cap" style="color: #3b82f6;"></i> Graduações & Cursos de Especialização
+      </h3>
 
-        <!-- 1. GRADUAÇÃO -->
+      <div class="edu-grid" style="margin-bottom: 40px;">
+        <!-- Card de Graduação -->
         <div class="edu-card">
           <div>
             <span class="edu-badge badge-graduacao">Graduação</span>
             <h3 class="edu-title">Análise e Desenvolvimento de Sistemas (ADS)</h3>
             <div class="edu-institution">
-              <i class="fa-solid fa-graduation-cap"></i> Ensino Superior Tecnológico
+              <i class="fa-solid fa-university"></i> Ensino Superior Tecnológico
             </div>
             <p class="edu-details">
-              Formação com ênfase em engenharia de software, modelagem de dados relacionais e não-relacionais, arquitetura de sistemas web e mobile, e desenvolvimento seguro.
+              Formação focada em desenvolvimento de software, modelagem de banco de dados, arquiteturas corporativas, estruturas de dados e segurança de sistemas.
             </p>
           </div>
           <div class="edu-meta">
-            <span><i class="fa-regular fa-calendar"></i> Em andamento</span>
-            <span style="color: #60a5fa; font-weight: 600;">Graduando</span>
+            <span><i class="fa-regular fa-calendar"></i> Previsão de Conclusão: 2026</span>
+            <span style="color: #60a5fa; font-weight: 600;">Em andamento</span>
           </div>
         </div>
 
-        <!-- 2. CURSOS DE ESPECIALIZAÇÃO -->
+        <!-- Card de Curso de Especialização -->
         <div class="edu-card">
           <div>
             <span class="edu-badge badge-curso">Curso Profissionalizante</span>
             <h3 class="edu-title">Desenvolvimento Full Stack & Mobile</h3>
             <div class="edu-institution">
-              <i class="fa-solid fa-laptop-code"></i> Especialização Prática
+              <i class="fa-solid fa-laptop-code"></i> Formação Especializada
             </div>
             <p class="edu-details">
-              Aprofundamento na construção de APIs com Node.js e Express, interfaces interativas com React e TypeScript, e criação de apps móveis com Flutter e Android nativo.
+              Aprofundamento prático em TypeScript, ecossistema React/Node.js, criação de APIs RESTful, bancos NoSQL/MongoDB e desenvolvimento mobile com Flutter e Android Nativo.
             </p>
           </div>
           <div class="edu-meta">
-            <span><i class="fa-regular fa-clock"></i> Carga Horária: Intensivo</span>
+            <span><i class="fa-regular fa-clock"></i> Formação Prática</span>
             <span style="color: #34d399; font-weight: 600;">Concluído</span>
           </div>
         </div>
+      </div>
 
-        <!-- 3. CERTIFICADOS -->
+      <!-- 2. BLOCO DE CERTIFICADOS COM FOTO / ARQUIVO COMPROBATÓRIO -->
+      <h3 style="font-size: 1.15rem; color: #ffffff; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-certificate" style="color: #fbbf24;"></i> Certificados (Visualização de Imagem / Arquivo)
+      </h3>
+
+      <div class="edu-grid">
+
+        <!-- Certificado 1 -->
         <div class="edu-card">
           <div>
             <span class="edu-badge badge-certificado">Certificado Técnico</span>
             <h3 class="edu-title">Boas Práticas de Código & Arquitetura Segura</h3>
             <div class="edu-institution">
-              <i class="fa-solid fa-award"></i> Certificação Técnica
+              <i class="fa-solid fa-shield-halved"></i> Segurança & Engenharia de Software
             </div>
+
+            <!-- Espaço reservado para a Foto ou Documento do Certificado -->
+            <div class="cert-preview-box">
+              <img src="certificados/certificado-1.jpg" alt="Certificado de Boas Práticas e Segurança" class="cert-img" onclick="abrirCertificado(this.src)" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="cert-placeholder" style="display: none;">
+                <i class="fa-solid fa-file-shield"></i>
+                <span>Coloque o arquivo na pasta <b>certificados/certificado-1.jpg</b></span>
+              </div>
+            </div>
+
             <p class="edu-details">
-              Certificação cobrindo padrões RESTful, autenticação via JWT, blindagem de credenciais sensíveis (.env), segurança em banco de dados e versionamento avançado com Git.
+              Cobre arquitetura limpa, proteção de credenciais (.env), autenticação com JWT e padrões de qualidade de código.
             </p>
           </div>
           <div class="edu-meta">
-            <span><i class="fa-solid fa-certificate"></i> Credencial Verificada</span>
-            <span class="edu-verify-link">Ativo <i class="fa-solid fa-check"></i></span>
+            <span><i class="fa-regular fa-calendar"></i> Ano: 2026</span>
+            <a href="certificados/certificado-1.jpg" target="_blank" class="btn-cert-action">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Arquivo
+            </a>
+          </div>
+        </div>
+
+        <!-- Certificado 2 -->
+        <div class="edu-card">
+          <div>
+            <span class="edu-badge badge-certificado">Certificado Técnico</span>
+            <h3 class="edu-title">Desenvolvimento Full Stack & APIs RESTful</h3>
+            <div class="edu-institution">
+              <i class="fa-solid fa-code"></i> Frontend & Backend Moderno
+            </div>
+
+            <!-- Espaço reservado para a Foto ou Documento do Certificado -->
+            <div class="cert-preview-box">
+              <img src="certificados/certificado-2.jpg" alt="Certificado Full Stack" class="cert-img" onclick="abrirCertificado(this.src)" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="cert-placeholder" style="display: none;">
+                <i class="fa-solid fa-file-code"></i>
+                <span>Coloque o arquivo na pasta <b>certificados/certificado-2.jpg</b></span>
+              </div>
+            </div>
+
+            <p class="edu-details">
+              Construção de aplicações escaláveis, consumo de APIs, integração com bancos relacionais e NoSQL.
+            </p>
+          </div>
+          <div class="edu-meta">
+            <span><i class="fa-regular fa-calendar"></i> Ano: 2026</span>
+            <a href="certificados/certificado-2.jpg" target="_blank" class="btn-cert-action">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Arquivo
+            </a>
+          </div>
+        </div>
+
+        <!-- Certificado 3 -->
+        <div class="edu-card">
+          <div>
+            <span class="edu-badge badge-certificado">Certificado Mobile</span>
+            <h3 class="edu-title">Desenvolvimento Mobile com Android & Flutter</h3>
+            <div class="edu-institution">
+              <i class="fa-solid fa-mobile-screen-button"></i> Aplicativos Móveis
+            </div>
+
+            <!-- Espaço reservado para a Foto ou Documento do Certificado -->
+            <div class="cert-preview-box">
+              <img src="certificados/certificado-3.jpg" alt="Certificado Mobile" class="cert-img" onclick="abrirCertificado(this.src)" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="cert-placeholder" style="display: none;">
+                <i class="fa-solid fa-file-lines"></i>
+                <span>Coloque o arquivo na pasta <b>certificados/certificado-3.jpg</b></span>
+              </div>
+            </div>
+
+            <p class="edu-details">
+              Criação de aplicativos nativos e híbridos, persistência local com Room/SQLite e integração com serviços remotos.
+            </p>
+          </div>
+          <div class="edu-meta">
+            <span><i class="fa-regular fa-calendar"></i> Ano: 2026</span>
+            <a href="certificados/certificado-3.jpg" target="_blank" class="btn-cert-action">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Arquivo
+            </a>
           </div>
         </div>
 
       </div>
     </div>
   </section>
+
+  <!-- Modal para visualização em tela cheia do certificado -->
+  <div class="cert-modal" id="certModal" onclick="this.style.display='none'">
+    <span class="cert-modal-close">&times;</span>
+    <img id="certModalImg" src="" alt="Certificado Ampliado">
+  </div>
+
+  <script>
+    function abrirCertificado(src) {
+      const modal = document.getElementById('certModal');
+      const img = document.getElementById('certModalImg');
+      img.src = src;
+      modal.style.display = 'flex';
+    }
+  </script>
 
   <!-- SOBRE -->
   <section class="section" id="sobre">
