@@ -537,14 +537,47 @@
       text-decoration: underline;
     }
 
-    /* ================= CERTIFICADOS COM FOTO/DOCUMENTO ================= */
+    /* ================= CERTIFICADOS COM FOTO/DOCUMENTO / ADICIONAR ================= */
+    .cert-controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding: 16px 20px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+    }
+
+    .btn-add-cert {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #2563eb;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-add-cert:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
     .cert-preview-box {
       width: 100%;
       height: 180px;
       border-radius: 6px;
       border: 1px dashed #334155;
       background-color: #0b0f17;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -575,12 +608,21 @@
       font-size: 0.8rem;
       text-align: center;
       padding: 14px;
-      gap: 6px;
+      gap: 8px;
+      width: 100%;
+      height: 100%;
     }
 
     .cert-placeholder i {
       font-size: 2rem;
       color: #3b82f6;
+    }
+
+    .cert-quick-upload {
+      font-size: 0.72rem;
+      color: #38bdf8;
+      cursor: pointer;
+      text-decoration: underline;
     }
 
     .btn-cert-action {
@@ -595,6 +637,7 @@
       font-size: 0.78rem;
       font-weight: 600;
       text-decoration: none;
+      cursor: pointer;
       transition: background-color 0.2s, color 0.2s;
     }
 
@@ -602,6 +645,114 @@
       background-color: #2563eb;
       color: #ffffff;
       border-color: #2563eb;
+    }
+
+    .btn-cert-delete {
+      background: none;
+      border: none;
+      color: #ef4444;
+      font-size: 0.78rem;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.2s;
+    }
+
+    .btn-cert-delete:hover {
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    /* Modal de Novo Certificado */
+    .cert-form-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 1001;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .cert-form-card {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 500px;
+      padding: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+    }
+
+    .cert-form-card h3 {
+      font-size: 1.25rem;
+      color: #ffffff;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      color: #94a3b8;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 9px 12px;
+      background: #0b0f17;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 0.88rem;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
+    .form-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn-cancel {
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .btn-save {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
     }
 
     /* Modal / Visualizador de Certificado em Tela Cheia */
@@ -972,81 +1123,69 @@
       </div>
 
       <!-- 2. BLOCO DE CERTIFICADOS COM FOTO / ARQUIVO COMPROBATÓRIO -->
-      <h3 id="certificados" style="font-size: 1.15rem; color: #ffffff; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-        <i class="fa-solid fa-certificate" style="color: #fbbf24;"></i> Certificados & Comprovantes
-      </h3>
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+        <h3 id="certificados" style="font-size: 1.15rem; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-certificate" style="color: #fbbf24;"></i> Certificados & Comprovantes
+        </h3>
+        <button class="btn-add-cert" onclick="abrirModalNovoCertificado()">
+          <i class="fa-solid fa-plus"></i> Adicionar Certificado
+        </button>
+      </div>
 
-      <div class="edu-grid">
-
-        <!-- Certificado 1 -->
-        <div class="edu-card">
-          <div>
-            <span class="edu-badge badge-certificado">Certificado</span>
-            
-            <!-- Espaço para a Foto ou Documento do Certificado -->
-            <div class="cert-preview-box">
-              <img src="certificados/certificado-1.jpg" alt="Certificado" class="cert-img" onclick="abrirCertificado(this.src)" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-              <div class="cert-placeholder" style="display: none;">
-                <i class="fa-solid fa-file-circle-check"></i>
-                <span>Coloque o arquivo em:<br><b>certificados/certificado-1.jpg</b></span>
-              </div>
-            </div>
-          </div>
-          <div class="edu-meta">
-            <span><i class="fa-solid fa-certificate"></i> Certificado 1</span>
-            <a href="certificados/certificado-1.jpg" target="_blank" class="btn-cert-action">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Arquivo
-            </a>
-          </div>
+      <!-- Barra de informação e opções -->
+      <div class="cert-controls-bar">
+        <div style="font-size: 0.85rem; color: #94a3b8;">
+          <i class="fa-solid fa-circle-info" style="color: #38bdf8;"></i> Você pode adicionar <b>infinitos certificados</b>: enviando fotos/PDFs do seu computador, usando links da internet (Google Drive, Dropbox, links de cursos) ou salvando na pasta.
         </div>
+        <button class="btn-add-cert" onclick="abrirModalNovoCertificado()" style="padding: 6px 12px; font-size: 0.8rem; background: #1e293b; border: 1px solid #334155;">
+          <i class="fa-solid fa-file-circle-plus"></i> Novo Campo
+        </button>
+      </div>
 
-        <!-- Certificado 2 -->
-        <div class="edu-card">
-          <div>
-            <span class="edu-badge badge-certificado">Certificado</span>
-            
-            <!-- Espaço para a Foto ou Documento do Certificado -->
-            <div class="cert-preview-box">
-              <img src="certificados/certificado-2.jpg" alt="Certificado" class="cert-img" onclick="abrirCertificado(this.src)" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-              <div class="cert-placeholder" style="display: none;">
-                <i class="fa-solid fa-file-circle-check"></i>
-                <span>Coloque o arquivo em:<br><b>certificados/certificado-2.jpg</b></span>
-              </div>
-            </div>
-          </div>
-          <div class="edu-meta">
-            <span><i class="fa-solid fa-certificate"></i> Certificado 2</span>
-            <a href="certificados/certificado-2.jpg" target="_blank" class="btn-cert-action">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Arquivo
-            </a>
-          </div>
-        </div>
-
-        <!-- Certificado 3 -->
-        <div class="edu-card">
-          <div>
-            <span class="edu-badge badge-certificado">Certificado</span>
-            
-            <!-- Espaço para a Foto ou Documento do Certificado -->
-            <div class="cert-preview-box">
-              <img src="certificados/certificado-3.jpg" alt="Certificado" class="cert-img" onclick="abrirCertificado(this.src)" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-              <div class="cert-placeholder" style="display: none;">
-                <i class="fa-solid fa-file-circle-check"></i>
-                <span>Coloque o arquivo em:<br><b>certificados/certificado-3.jpg</b></span>
-              </div>
-            </div>
-          </div>
-          <div class="edu-meta">
-            <span><i class="fa-solid fa-certificate"></i> Certificado 3</span>
-            <a href="certificados/certificado-3.jpg" target="_blank" class="btn-cert-action">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Arquivo
-            </a>
-          </div>
-        </div>
-
+      <!-- Grid dinâmico de certificados -->
+      <div class="edu-grid" id="certificadosGrid">
+        <!-- Renderizado dinamicamente via JavaScript / persistido no LocalStorage -->
       </div>
     </div>
   </section>
+
+  <!-- Modal para ADICIONAR NOVO CERTIFICADO -->
+  <div class="cert-form-modal" id="modalNovoCertificado">
+    <div class="cert-form-card">
+      <h3><i class="fa-solid fa-award" style="color: #fbbf24;"></i> Adicionar Novo Certificado</h3>
+      
+      <div class="form-group">
+        <label>Nome / Identificação do Certificado:</label>
+        <input type="text" id="novoCertNome" placeholder="Ex: Certificado de Gestão / Certificado 1" value="">
+      </div>
+
+      <div class="form-group">
+        <label>Como deseja anexar o comprovante?</label>
+        <select id="novoCertTipoOrigem" onchange="alternarOrigemCertificado()">
+          <option value="upload">Enviar Imagem/Foto do Meu Computador / Celular</option>
+          <option value="link">Colar Link da Internet (Google Drive, Site, PDF Online)</option>
+          <option value="pasta">Caminho da Pasta Local (ex: certificados/meu-arquivo.jpg)</option>
+        </select>
+      </div>
+
+      <!-- Opção 1: Upload direto de arquivo de imagem -->
+      <div class="form-group" id="grupoUploadArquivo">
+        <label>Selecione a Imagem do Certificado (PNG, JPG, JPEG):</label>
+        <input type="file" id="novoCertArquivo" accept="image/*" onchange="processarArquivoLocal(this)">
+      </div>
+
+      <!-- Opção 2: Link da Internet ou Pasta -->
+      <div class="form-group" id="grupoLinkArquivo" style="display: none;">
+        <label id="labelLinkArquivo">Link ou Caminho do Arquivo:</label>
+        <input type="text" id="novoCertLink" placeholder="https://... ou certificados/nome.jpg">
+      </div>
+
+      <div class="form-buttons">
+        <button type="button" class="btn-cancel" onclick="fecharModalNovoCertificado()">Cancelar</button>
+        <button type="button" class="btn-save" onclick="salvarNovoCertificado()">Salvar Certificado</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal para visualização em tela cheia do certificado -->
   <div class="cert-modal" id="certModal" onclick="this.style.display='none'">
@@ -1054,13 +1193,230 @@
     <img id="certModalImg" src="" alt="Certificado Ampliado">
   </div>
 
+  <!-- Input oculto para troca rápida de foto em card existente -->
+  <input type="file" id="inputSubstituirFoto" accept="image/*" style="display: none;" onchange="concluirSubstituicaoFoto(this)">
+
   <script>
+    // Lista padrão inicial de certificados
+    const CERTIFICADOS_PADRAO = [
+      {
+        id: 1,
+        nome: "Certificado 1",
+        src: "certificados/certificado-1.jpg"
+      },
+      {
+        id: 2,
+        nome: "Certificado 2",
+        src: "certificados/certificado-2.jpg"
+      },
+      {
+        id: 3,
+        nome: "Certificado 3",
+        src: "certificados/certificado-3.jpg"
+      }
+    ];
+
+    // Carregar do localStorage ou usar padrão
+    function obterCertificados() {
+      const salvos = localStorage.getItem('marcos_certificados_v2');
+      if (salvos) {
+        try {
+          return JSON.parse(salvos);
+        } catch(e) {
+          return CERTIFICADOS_PADRAO;
+        }
+      }
+      return CERTIFICADOS_PADRAO;
+    }
+
+    function salvarCertificadosNoStorage(lista) {
+      try {
+        localStorage.setItem('marcos_certificados_v2', JSON.stringify(lista));
+      } catch(e) {
+        console.warn("Storage cheio ou restrito, usando memoria:", e);
+      }
+    }
+
+    let certificadosAtuais = obterCertificados();
+    let arquivoBase64Temporario = '';
+    let certIdParaSubstituir = null;
+
+    function renderizarCertificados() {
+      const container = document.getElementById('certificadosGrid');
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      certificadosAtuais.forEach((cert, index) => {
+        const card = document.createElement('div');
+        card.className = 'edu-card';
+
+        const isDataUrl = cert.src && cert.src.startsWith('data:image');
+        const displaySrc = cert.src || '';
+
+        card.innerHTML = `
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span class="edu-badge badge-certificado">Certificado</span>
+              <button class="btn-cert-delete" onclick="removerCertificado(${cert.id})" title="Remover este campo de certificado">
+                <i class="fa-solid fa-trash-can"></i> Excluir
+              </button>
+            </div>
+            
+            <div class="cert-preview-box" id="box-cert-${cert.id}">
+              <img src="${displaySrc}" alt="${cert.nome}" class="cert-img" 
+                   onclick="abrirCertificado('${displaySrc}')" 
+                   onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                   style="${!displaySrc ? 'display: none;' : ''}">
+              <div class="cert-placeholder" style="${displaySrc ? 'display: none;' : 'display: flex;'}">
+                <i class="fa-solid fa-file-circle-check"></i>
+                <span>Nenhuma imagem carregada</span>
+                <span class="cert-quick-upload" onclick="iniciarSubstituicaoFoto(${cert.id})">
+                  <i class="fa-solid fa-upload"></i> Carregar Imagem do PC
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="edu-meta">
+            <span><i class="fa-solid fa-award"></i> ${cert.nome}</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button class="btn-cert-action" onclick="iniciarSubstituicaoFoto(${cert.id})" title="Trocar ou anexar foto">
+                <i class="fa-solid fa-camera"></i> Anexar Foto
+              </button>
+              ${displaySrc ? `
+                <a href="${displaySrc}" target="_blank" class="btn-cert-action">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir
+                </a>
+              ` : ''}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function abrirModalNovoCertificado() {
+      document.getElementById('novoCertNome').value = `Certificado ${certificadosAtuais.length + 1}`;
+      document.getElementById('novoCertLink').value = '';
+      document.getElementById('novoCertArquivo').value = '';
+      document.getElementById('novoCertTipoOrigem').value = 'upload';
+      alternarOrigemCertificado();
+      arquivoBase64Temporario = '';
+      document.getElementById('modalNovoCertificado').style.display = 'flex';
+    }
+
+    function fecharModalNovoCertificado() {
+      document.getElementById('modalNovoCertificado').style.display = 'none';
+    }
+
+    function alternarOrigemCertificado() {
+      const tipo = document.getElementById('novoCertTipoOrigem').value;
+      const grupoUpload = document.getElementById('grupoUploadArquivo');
+      const grupoLink = document.getElementById('grupoLinkArquivo');
+      const labelLink = document.getElementById('labelLinkArquivo');
+
+      if (tipo === 'upload') {
+        grupoUpload.style.display = 'block';
+        grupoLink.style.display = 'none';
+      } else if (tipo === 'link') {
+        grupoUpload.style.display = 'none';
+        grupoLink.style.display = 'block';
+        labelLink.textContent = 'Cole a URL direta da imagem ou documento (Google Drive, Web, etc.):';
+        document.getElementById('novoCertLink').placeholder = 'https://exemplo.com/meu-certificado.jpg';
+      } else {
+        grupoUpload.style.display = 'none';
+        grupoLink.style.display = 'block';
+        labelLink.textContent = 'Caminho na pasta de certificados:';
+        document.getElementById('novoCertLink').placeholder = 'certificados/certificado-extra.jpg';
+      }
+    }
+
+    function processarArquivoLocal(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          arquivoBase64Temporario = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function salvarNovoCertificado() {
+      const nomeInput = document.getElementById('novoCertNome').value.trim();
+      const nome = nomeInput || `Certificado ${certificadosAtuais.length + 1}`;
+      const tipo = document.getElementById('novoCertTipoOrigem').value;
+      let finalSrc = '';
+
+      if (tipo === 'upload') {
+        finalSrc = arquivoBase64Temporario;
+        if (!finalSrc) {
+          alert('Por favor, selecione uma foto ou arquivo de imagem do seu computador.');
+          return;
+        }
+      } else {
+        finalSrc = document.getElementById('novoCertLink').value.trim();
+        if (!finalSrc) {
+          alert('Por favor, digite o link ou o caminho do arquivo.');
+          return;
+        }
+      }
+
+      const novoItem = {
+        id: Date.now(),
+        nome: nome,
+        src: finalSrc
+      };
+
+      certificadosAtuais.push(novoItem);
+      salvarCertificadosNoStorage(certificadosAtuais);
+      renderizarCertificados();
+      fecharModalNovoCertificado();
+    }
+
+    function removerCertificado(id) {
+      if (confirm('Deseja remover este certificado da sua lista?')) {
+        certificadosAtuais = certificadosAtuais.filter(c => c.id !== id);
+        salvarCertificadosNoStorage(certificadosAtuais);
+        renderizarCertificados();
+      }
+    }
+
+    function iniciarSubstituicaoFoto(id) {
+      certIdParaSubstituir = id;
+      document.getElementById('inputSubstituirFoto').click();
+    }
+
+    function concluirSubstituicaoFoto(input) {
+      if (input.files && input.files[0] && certIdParaSubstituir !== null) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const item = certificadosAtuais.find(c => c.id === certIdParaSubstituir);
+          if (item) {
+            item.src = e.target.result;
+            salvarCertificadosNoStorage(certificadosAtuais);
+            renderizarCertificados();
+          }
+          input.value = '';
+          certIdParaSubstituir = null;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
     function abrirCertificado(src) {
+      if (!src) return;
       const modal = document.getElementById('certModal');
       const img = document.getElementById('certModalImg');
       img.src = src;
       modal.style.display = 'flex';
     }
+
+    // Inicializar grid na carga da página
+    document.addEventListener('DOMContentLoaded', renderizarCertificados);
+    // Também chamar imediatamente
+    renderizarCertificados();
   </script>
 
   <!-- SOBRE -->
