@@ -1197,7 +1197,7 @@
   <input type="file" id="inputSubstituirFoto" accept="image/*" style="display: none;" onchange="concluirSubstituicaoFoto(this)">
 
   <script>
-    // Lista padrão inicial de certificados
+    // Lista padrão inicial com apenas 2 certificados
     const CERTIFICADOS_PADRAO = [
       {
         id: 1,
@@ -1208,17 +1208,12 @@
         id: 2,
         nome: "Certificado 2",
         src: "certificados/certificado-2.jpg"
-      },
-      {
-        id: 3,
-        nome: "Certificado 3",
-        src: "certificados/certificado-3.jpg"
       }
     ];
 
     // Carregar do localStorage ou usar padrão
     function obterCertificados() {
-      const salvos = localStorage.getItem('marcos_certificados_v2');
+      const salvos = localStorage.getItem('marcos_certificados_v3');
       if (salvos) {
         try {
           return JSON.parse(salvos);
@@ -1231,7 +1226,7 @@
 
     function salvarCertificadosNoStorage(lista) {
       try {
-        localStorage.setItem('marcos_certificados_v2', JSON.stringify(lista));
+        localStorage.setItem('marcos_certificados_v3', JSON.stringify(lista));
       } catch(e) {
         console.warn("Storage cheio ou restrito, usando memoria:", e);
       }
