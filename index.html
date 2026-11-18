@@ -1533,9 +1533,21 @@
         </button>
       </div>
 
-      <!-- Grid dinâmico de especializações -->
       <div class="edu-list-grid" id="especializacoesGrid">
-        <!-- Renderizado dinamicamente via JavaScript / persistido no LocalStorage -->
+        <!-- Cards Fixos Originais (Sempre presentes e visíveis) -->
+        <div class="edu-card-item">
+          <span class="edu-badge-type">Curso Profissionalizante</span>
+          <h4 class="edu-title">Análise e Desenvolvimento de Sistemas</h4>
+          <div class="edu-institution">Ensino Superior em Andamento</div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">Formação com base sólida em engenharia de software, modelagem de dados, programação orientada a objetos e governança de TI.</p>
+        </div>
+
+        <div class="edu-card-item">
+          <span class="edu-badge-type">Especialização Técnica</span>
+          <h4 class="edu-title">Desenvolvimento Full Stack & Mobile</h4>
+          <div class="edu-institution">Projetos Práticos & Extensão</div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">Construção prática de sistemas de ponto de venda, aplicativos nativos Android, e-commerce e soluções orientadas a mercado.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -1787,60 +1799,49 @@
     renderizarEspecializacoes();
 
     /* ==========================================================================
-       GERENCIAMENTO DINÂMICO DE ESPECIALIZAÇÕES & CURSOS
+       GERENCIAMENTO DINÂMICO DE ESPECIALIZAÇÕES & CURSOS EXTRAS
        ========================================================================== */
-    const CHAVE_EDU_STORAGE = 'marcos_especializacoes_v1';
-    const ESPECIALIZACOES_PADRAO = [
-      {
-        id: 1,
-        tipo: "Curso Profissionalizante",
-        titulo: "Análise e Desenvolvimento de Sistemas",
-        instituicao: "Ensino Superior em Andamento",
-        descricao: "Formação com base sólida em engenharia de software, modelagem de dados, programação orientada a objetos e governança de TI."
-      },
-      {
-        id: 2,
-        tipo: "Especialização Técnica",
-        titulo: "Desenvolvimento Full Stack & Mobile",
-        instituicao: "Projetos Práticos & Extensão",
-        descricao: "Construção prática de sistemas de ponto de venda, aplicativos nativos Android, e-commerce e soluções orientadas a mercado."
-      }
-    ];
+    const CHAVE_EDU_EXTRAS = 'marcos_especializacoes_extras_v1';
 
-    function obterEspecializacoes() {
-      const salvas = localStorage.getItem(CHAVE_EDU_STORAGE);
+    function obterEspecializacoesExtras() {
+      const salvas = localStorage.getItem(CHAVE_EDU_EXTRAS);
       if (salvas) {
         try {
           return JSON.parse(salvas);
         } catch (e) {
-          return ESPECIALIZACOES_PADRAO;
+          return [];
         }
       }
-      return ESPECIALIZACOES_PADRAO;
+      return [];
     }
 
-    function salvarEspecializacoesStorage(lista) {
+    function salvarEspecializacoesExtras(lista) {
       try {
-        localStorage.setItem(CHAVE_EDU_STORAGE, JSON.stringify(lista));
+        localStorage.setItem(CHAVE_EDU_EXTRAS, JSON.stringify(lista));
       } catch (e) {
         console.warn('Erro ao salvar no storage:', e);
       }
     }
 
-    let especializacoesAtuais = obterEspecializacoes();
+    let extrasEspecializacoes = obterEspecializacoesExtras();
 
     function renderizarEspecializacoes() {
       const grid = document.getElementById('especializacoesGrid');
       if (!grid) return;
 
+      // Mantém os 2 primeiros cards originais fixos intactos
+      const cardsOriginais = Array.from(grid.children).slice(0, 2);
       grid.innerHTML = '';
-      especializacoesAtuais.forEach(item => {
+      cardsOriginais.forEach(c => grid.appendChild(c));
+
+      // Adiciona os cards extras criados pelo usuário
+      extrasEspecializacoes.forEach(item => {
         const card = document.createElement('div');
         card.className = 'edu-card-item';
         card.innerHTML = `
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
             <span class="edu-badge-type">${item.tipo}</span>
-            <button class="btn-delete-card" onclick="removerEspecializacao(${item.id})" title="Remover este item">
+            <button class="btn-delete-card" onclick="removerEspecializacaoExtra(${item.id})" title="Remover este item">
               <i class="fa-solid fa-trash-can"></i> Excluir
             </button>
           </div>
@@ -1883,16 +1884,16 @@
         descricao: descricao || 'Aprofundamento técnico e prático de competências.'
       };
 
-      especializacoesAtuais.push(novoItem);
-      salvarEspecializacoesStorage(especializacoesAtuais);
+      extrasEspecializacoes.push(novoItem);
+      salvarEspecializacoesExtras(extrasEspecializacoes);
       renderizarEspecializacoes();
       fecharModalNovaEspecializacao();
     }
 
-    function removerEspecializacao(id) {
+    function removerEspecializacaoExtra(id) {
       if (confirm('Deseja excluir esta especialização da sua lista?')) {
-        especializacoesAtuais = especializacoesAtuais.filter(item => item.id !== id);
-        salvarEspecializacoesStorage(especializacoesAtuais);
+        extrasEspecializacoes = extrasEspecializacoes.filter(item => item.id !== id);
+        salvarEspecializacoesExtras(extrasEspecializacoes);
         renderizarEspecializacoes();
       }
     }
