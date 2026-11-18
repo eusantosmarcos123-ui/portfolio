@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Exclusivo de Gestão | Marcos Vinícius</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-deep: #02040a;
+      --bg-card: rgba(8, 12, 24, 0.85);
+      --cobalt-pure: #0047FF;
+      --text-pure: #F4F6FB;
+      --text-muted: #8E9BAE;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --font-serif: 'Cinzel', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'Space Grotesk', monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      color: var(--text-pure);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Ambient glow */
+    .ambient-glow {
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 500px;
+      background: radial-gradient(ellipse at center, rgba(0, 71, 255, 0.25) 0%, transparent 70%);
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Tela de Login de Proteção */
+    #authOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 4, 10, 0.96);
+      backdrop-filter: blur(14px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-card {
+      background: #070b16;
+      border: 1px solid rgba(0, 71, 255, 0.4);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 420px;
+      padding: 36px 30px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 71, 255, 0.2);
+    }
+
+    .auth-card .shield-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(0, 71, 255, 0.15);
+      border: 2px solid var(--cobalt-pure);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #38bdf8;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 25px rgba(0, 71, 255, 0.4);
+    }
+
+    .auth-card h2 {
+      font-family: var(--font-serif);
+      font-size: 1.45rem;
+      margin-bottom: 8px;
+      color: #FFF;
+    }
+
+    .auth-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .auth-card input {
+      width: 100%;
+      padding: 12px 16px;
+      background: #02040a;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: #FFF;
+      font-size: 1rem;
+      text-align: center;
+      letter-spacing: 0.2em;
+      outline: none;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .auth-card input:focus {
+      border-color: var(--cobalt-pure);
+      box-shadow: 0 0 15px rgba(0, 71, 255, 0.35);
+    }
+
+    .btn-auth-submit {
+      width: 100%;
+      padding: 12px;
+      background: var(--cobalt-pure);
+      border: none;
+      border-radius: 12px;
+      color: #FFF;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-auth-submit:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 71, 255, 0.5);
+    }
+
+    /* Container Principal do Painel */
+    .dashboard-container {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Top Bar do Painel */
+    .dashboard-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .dashboard-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dashboard-brand .badge-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      background: rgba(0, 71, 255, 0.15);
+      border: 1px solid rgba(0, 71, 255, 0.4);
+      color: #82aaff;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .dashboard-brand h1 {
+      font-family: var(--font-serif);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .topbar-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-topbar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-view-live {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cad5e2;
+    }
+    .btn-view-live:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFF;
+    }
+
+    .btn-logout {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+    .btn-logout:hover {
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    /* Grid de Abas / Seções */
+    .dashboard-sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-sections {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 28px;
+      backdrop-filter: blur(12px);
+    }
+
+    .panel-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .panel-box-header h2 {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-add-action {
+      background: var(--cobalt-pure);
+      color: #FFF;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-add-action:hover {
+      background: #1d4ed8;
+    }
+
+    .items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .item-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .item-card:hover {
+      border-color: rgba(0, 71, 255, 0.3);
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--cobalt-pure);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+      display: inline-block;
+    }
+
+    .item-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #FFF;
+      margin-bottom: 4px;
+    }
+
+    .item-sub {
+      font-size: 0.8rem;
+      color: #38bdf8;
+      margin-bottom: 6px;
+    }
+
+    .item-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .btn-delete-item {
+      background: none;
+      border: none;
+      color: #ef4444;
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 6px 8px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .btn-delete-item:hover {
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    /* Modal de Criação */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: #080d1a;
+      border: 1px solid rgba(0, 71, 255, 0.4);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 480px;
+      padding: 26px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+    }
+
+    .modal-card h3 {
+      font-size: 1.25rem;
+      color: #FFF;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      background: #02040a;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      color: #FFF;
+      font-size: 0.9rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .form-group select option {
+      background-color: #080d1a !important;
+      color: #ffffff !important;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--cobalt-pure);
+      box-shadow: 0 0 12px rgba(0, 71, 255, 0.35);
+    }
+
+    .btn-ia-magic {
+      background: linear-gradient(135deg, rgba(0, 71, 255, 0.3) 0%, rgba(130, 170, 255, 0.25) 100%);
+      border: 1px solid rgba(0, 71, 255, 0.5);
+      color: #82aaff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-ia-magic:hover {
+      background: var(--cobalt-pure);
+      color: #FFF;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn-cancel {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-save {
+      background: var(--cobalt-pure);
+      border: none;
+      color: #FFF;
+      padding: 8px 22px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow"></div>
+
+  <!-- TELA DE AUTENTICAÇÃO SEGURA -->
+  <div id="authOverlay">
+    <div class="auth-card">
+      <div class="shield-icon">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h2>Painel do Marcos</h2>
+      <p>Área restrita de gestão de competências, especializações e dados do portfólio.</p>
+      <input type="password" id="adminPasswordInput" placeholder="DIGITE SUA SENHA" onkeyup="if(event.key==='Enter') autenticarAdmin()">
+      <button class="btn-auth-submit" onclick="autenticarAdmin()">
+        <i class="fa-solid fa-key"></i> Acessar Painel
+      </button>
+      <div id="authErrorMsg" style="display: none; color: #ef4444; font-size: 0.8rem; margin-top: 14px;">
+        <i class="fa-solid fa-circle-exclamation"></i> Senha incorreta. Acesso restrito a Marcos Vinícius.
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL DO PAINEL -->
+  <div class="dashboard-container" id="dashboardContent" style="display: none;">
+    
+    <header class="dashboard-topbar">
+      <div class="dashboard-brand">
+        <h1>Painel de Controle</h1>
+        <span class="badge-tag">EXCLUSIVO MARCOS VINÍCIUS</span>
+      </div>
+
+      <div class="topbar-actions">
+        <a href="index.html" class="btn-topbar btn-view-live">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Portfólio Público
+        </a>
+        <button class="btn-topbar btn-logout" onclick="encerrarSessaoAdmin()">
+          <i class="fa-solid fa-right-from-bracket"></i> Sair
+        </button>
+      </div>
+    </header>
+
+    <div class="dashboard-sections">
+      
+      <!-- SEÇÃO 1: GESTÃO DE ESPECIALIZAÇÕES & CURSOS -->
+      <div class="panel-box">
+        <div class="panel-box-header">
+          <h2><i class="fa-solid fa-graduation-cap" style="color: #38bdf8;"></i> Especializações</h2>
+          <button class="btn-add-action" onclick="abrirModalEspecializacaoAdmin()">
+            <i class="fa-solid fa-plus"></i> Nova Especialização
+          </button>
+        </div>
+
+        <div class="items-list" id="listaEspecializacoesAdmin">
+          <!-- Renderizado dinamicamente -->
+        </div>
+      </div>
+
+      <!-- SEÇÃO 2: GESTÃO DE COMPETÊNCIAS & HABILIDADES -->
+      <div class="panel-box">
+        <div class="panel-box-header">
+          <h2><i class="fa-solid fa-code" style="color: #82aaff;"></i> Competências</h2>
+          <button class="btn-add-action" onclick="abrirModalCompetenciaAdmin()">
+            <i class="fa-solid fa-plus"></i> Nova Competência
+          </button>
+        </div>
+
+        <div class="items-list" id="listaCompetenciasAdmin">
+          <!-- Renderizado dinamicamente -->
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MODAL: NOVA ESPECIALIZAÇÃO -->
+  <div class="modal-overlay" id="modalEspecializacaoAdmin" onclick="fecharModalEspecializacaoAdmin(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <h3><i class="fa-solid fa-graduation-cap" style="color: #38bdf8;"></i> Adicionar Especialização</h3>
+      
+      <div class="form-group">
+        <label>Tipo / Categoria:</label>
+        <select id="adminTipoEdu">
+          <option value="Especialização Técnica">Especialização Técnica</option>
+          <option value="Curso Profissionalizante">Curso Profissionalizante</option>
+          <option value="Graduação / Superior">Graduação / Superior</option>
+          <option value="Certificação Profissional">Certificação Profissional</option>
+          <option value="Capacitação Prática">Capacitação Prática</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Nome do Curso / Especialização:</label>
+        <input type="text" id="adminTituloEdu" placeholder="Ex: Engenharia de Software / IA Aplicada">
+      </div>
+
+      <div class="form-group">
+        <label>Instituição ou Status:</label>
+        <input type="text" id="adminInstituicaoEdu" placeholder="Ex: Projetos Práticos & Extensão / Concluído">
+      </div>
+
+      <div class="form-group">
+        <label>Descrição do Conteúdo:</label>
+        <textarea id="adminDescricaoEdu" placeholder="Resumo do conteúdo abordado..."></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="fecharModalEspecializacaoAdmin()">Cancelar</button>
+        <button class="btn-save" onclick="salvarEspecializacaoAdmin()">Salvar no Portfólio</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVA COMPETÊNCIA -->
+  <div class="modal-overlay" id="modalCompetenciaAdmin" onclick="fecharModalCompetenciaAdmin(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <h3><i class="fa-solid fa-code" style="color: #82aaff;"></i> Adicionar Competência</h3>
+      
+      <div class="form-group">
+        <label>Ícone Representativo:</label>
+        <select id="adminIconeSkill" onchange="alternarIconeOutroAdmin(this.value)">
+          <option value="fa-solid fa-laptop-code">💻 Laptop / Código</option>
+          <option value="fa-solid fa-server">🖥️ Servidor / Backend</option>
+          <option value="fa-solid fa-database">🗄️ Banco de Dados</option>
+          <option value="fa-solid fa-mobile-screen">📱 Aplicativo Mobile</option>
+          <option value="fa-solid fa-shield-halved">🛡️ Segurança & Blindagem</option>
+          <option value="fa-solid fa-cloud">☁️ Nuvem & DevOps</option>
+          <option value="fa-solid fa-brain">🧠 Inteligência Artificial</option>
+          <option value="fa-solid fa-gear">⚙️ Ferramentas & Engenharia</option>
+          <option value="outro">✨ Outro (Digitar Ícone)</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="adminGrupoIconeOutro" style="display: none;">
+        <label>Nome da Classe do Ícone (FontAwesome):</label>
+        <input type="text" id="adminIconePersonalizado" placeholder="Ex: fa-solid fa-chart-line ou fa-solid fa-briefcase">
+      </div>
+
+      <div class="form-group">
+        <label>Título da Competência:</label>
+        <input type="text" id="adminTituloSkill" placeholder="Ex: Mobile & Flutter / Arquitetura de Nuvem">
+      </div>
+
+      <div class="form-group">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label style="margin-bottom: 0;">Descrição:</label>
+          <button type="button" class="btn-ia-magic" onclick="gerarSugestaoIAAdmin()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Aprimorar com IA
+          </button>
+        </div>
+        <textarea id="adminDescricaoSkill" placeholder="Descreva com suas palavras ou use o botão 'Aprimorar com IA'..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Tecnologias / Tags (separadas por vírgula):</label>
+        <input type="text" id="adminTagsSkill" placeholder="Ex: Flutter, Dart, SQLite, Clean Architecture">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="fecharModalCompetenciaAdmin()">Cancelar</button>
+        <button class="btn-save" onclick="salvarCompetenciaAdmin()">Salvar no Portfólio</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CHAVE_ADMIN_AUTH = 'marcos_admin_authenticated';
+    const CHAVE_EDU_EXTRAS = 'marcos_especializacoes_extras_v1';
+    const CHAVE_SKILLS_EXTRAS = 'marcos_competencias_extras_v1';
+
+    function autenticarAdmin() {
+      const pass = document.getElementById('adminPasswordInput').value.trim();
+      const erro = document.getElementById('authErrorMsg');
+
+      if (pass === 'marcos' || pass === 'marcos123' || pass === '123' || pass === 'admin') {
+        sessionStorage.setItem(CHAVE_ADMIN_AUTH, 'true');
+        document.getElementById('authOverlay').style.display = 'none';
+        document.getElementById('dashboardContent').style.display = 'block';
+        carregarDadosAdmin();
+      } else {
+        erro.style.display = 'block';
+      }
+    }
+
+    function verificarAutenticacao() {
+      if (sessionStorage.getItem(CHAVE_ADMIN_AUTH) === 'true') {
+        document.getElementById('authOverlay').style.display = 'none';
+        document.getElementById('dashboardContent').style.display = 'block';
+        carregarDadosAdmin();
+      }
+    }
+
+    function encerrarSessaoAdmin() {
+      sessionStorage.removeItem(CHAVE_ADMIN_AUTH);
+      window.location.reload();
+    }
+
+    function carregarDadosAdmin() {
+      renderizarEspecializacoesAdmin();
+      renderizarCompetenciasAdmin();
+    }
+
+    /* GESTÃO DE ESPECIALIZAÇÕES */
+    function renderizarEspecializacoesAdmin() {
+      const container = document.getElementById('listaEspecializacoesAdmin');
+      const salvas = JSON.parse(localStorage.getItem(CHAVE_EDU_EXTRAS) || '[]');
+
+      container.innerHTML = `
+        <!-- Itens Fixos Padrão -->
+        <div class="item-card">
+          <div class="item-info">
+            <span class="item-tag">Curso Profissionalizante (Fixo Oficial)</span>
+            <div class="item-title">Análise e Desenvolvimento de Sistemas</div>
+            <div class="item-sub">Ensino Superior em Andamento</div>
+            <div class="item-desc">Formação com base sólida em engenharia de software, modelagem de dados, programação orientada a objetos e governança de TI.</div>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-info">
+            <span class="item-tag">Especialização Técnica (Fixo Oficial)</span>
+            <div class="item-title">Desenvolvimento Full Stack & Mobile</div>
+            <div class="item-sub">Projetos Práticos & Extensão</div>
+            <div class="item-desc">Construção prática de sistemas de ponto de venda, aplicativos nativos Android, e-commerce e soluções orientadas a mercado.</div>
+          </div>
+        </div>
+      `;
+
+      salvas.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        div.innerHTML = `
+          <div class="item-info">
+            <span class="item-tag">${item.tipo}</span>
+            <div class="item-title">${item.titulo}</div>
+            <div class="item-sub">${item.instituicao}</div>
+            <div class="item-desc">${item.descricao}</div>
+          </div>
+          <button class="btn-delete-item" onclick="excluirEspecializacaoAdmin(${item.id})" title="Excluir do Portfólio">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function abrirModalEspecializacaoAdmin() {
+      document.getElementById('adminTituloEdu').value = '';
+      document.getElementById('adminInstituicaoEdu').value = '';
+      document.getElementById('adminDescricaoEdu').value = '';
+      document.getElementById('modalEspecializacaoAdmin').style.display = 'flex';
+    }
+
+    function fecharModalEspecializacaoAdmin(e) {
+      if (e && e.target !== e.currentTarget && !e.target.classList.contains('btn-cancel')) return;
+      document.getElementById('modalEspecializacaoAdmin').style.display = 'none';
+    }
+
+    function salvarEspecializacaoAdmin() {
+      const titulo = document.getElementById('adminTituloEdu').value.trim();
+      const instituicao = document.getElementById('adminInstituicaoEdu').value.trim();
+      const descricao = document.getElementById('adminDescricaoEdu').value.trim();
+      const tipo = document.getElementById('adminTipoEdu').value;
+
+      if (!titulo) {
+        alert('Informe o título da especialização.');
+        return;
+      }
+
+      const salvas = JSON.parse(localStorage.getItem(CHAVE_EDU_EXTRAS) || '[]');
+      salvas.push({
+        id: Date.now(),
+        tipo: tipo,
+        titulo: titulo,
+        instituicao: instituicao || 'Certificação & Especialização',
+        descricao: descricao || 'Aprofundamento técnico e prático de competências.'
+      });
+
+      localStorage.setItem(CHAVE_EDU_EXTRAS, JSON.stringify(salvas));
+      renderizarEspecializacoesAdmin();
+      fecharModalEspecializacaoAdmin();
+    }
+
+    function excluirEspecializacaoAdmin(id) {
+      if (confirm('Deseja remover esta especialização do seu portfólio?')) {
+        let salvas = JSON.parse(localStorage.getItem(CHAVE_EDU_EXTRAS) || '[]');
+        salvas = salvas.filter(item => item.id !== id);
+        localStorage.setItem(CHAVE_EDU_EXTRAS, JSON.stringify(salvas));
+        renderizarEspecializacoesAdmin();
+      }
+    }
+
+    /* GESTÃO DE COMPETÊNCIAS */
+    function renderizarCompetenciasAdmin() {
+      const container = document.getElementById('listaCompetenciasAdmin');
+      const salvas = JSON.parse(localStorage.getItem(CHAVE_SKILLS_EXTRAS) || '[]');
+
+      container.innerHTML = `
+        <!-- Itens Fixos Padrão -->
+        <div class="item-card">
+          <div class="item-info">
+            <span class="item-tag">Frontend & Interfaces (Fixo Oficial)</span>
+            <div class="item-title">💻 Frontend & Interfaces</div>
+            <div class="item-desc">Criação de experiências responsivas, fluidas e acessíveis focadas na redução de atrito e alta taxa de conversão.</div>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-info">
+            <span class="item-tag">Backend & APIs (Fixo Oficial)</span>
+            <div class="item-title">🖥️ Backend & APIs</div>
+            <div class="item-desc">Construção de rotas REST escaláveis, validação de regras de negócio, persistência de dados e integrações externas.</div>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-info">
+            <span class="item-tag">Bancos de Dados (Fixo Oficial)</span>
+            <div class="item-title">🗄️ Bancos de Dados</div>
+            <div class="item-desc">Modelagem relacional, otimização de consultas e integridade referencial com foco em estabilidade.</div>
+          </div>
+        </div>
+      `;
+
+      salvas.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        div.innerHTML = `
+          <div class="item-info">
+            <span class="item-tag">${item.tags ? item.tags.join(', ') : 'Competência'}</span>
+            <div class="item-title"><i class="${item.icone || 'fa-solid fa-code'}"></i> ${item.titulo}</div>
+            <div class="item-desc">${item.descricao}</div>
+          </div>
+          <button class="btn-delete-item" onclick="excluirCompetenciaAdmin(${item.id})" title="Excluir do Portfólio">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function abrirModalCompetenciaAdmin() {
+      document.getElementById('adminTituloSkill').value = '';
+      document.getElementById('adminDescricaoSkill').value = '';
+      document.getElementById('adminTagsSkill').value = '';
+      document.getElementById('adminIconeSkill').value = 'fa-solid fa-laptop-code';
+      alternarIconeOutroAdmin('fa-solid fa-laptop-code');
+      document.getElementById('modalCompetenciaAdmin').style.display = 'flex';
+    }
+
+    function fecharModalCompetenciaAdmin(e) {
+      if (e && e.target !== e.currentTarget && !e.target.classList.contains('btn-cancel')) return;
+      document.getElementById('modalCompetenciaAdmin').style.display = 'none';
+    }
+
+    function alternarIconeOutroAdmin(valor) {
+      document.getElementById('adminGrupoIconeOutro').style.display = valor === 'outro' ? 'block' : 'none';
+    }
+
+    function salvarCompetenciaAdmin() {
+      const titulo = document.getElementById('adminTituloSkill').value.trim();
+      const descricao = document.getElementById('adminDescricaoSkill').value.trim();
+      const tagsRaw = document.getElementById('adminTagsSkill').value.trim();
+      const iconeSelect = document.getElementById('adminIconeSkill').value;
+      const iconeCustom = document.getElementById('adminIconePersonalizado').value.trim();
+
+      if (!titulo) {
+        alert('Informe o título da competência.');
+        return;
+      }
+
+      let iconeFinal = iconeSelect;
+      if (iconeSelect === 'outro') {
+        iconeFinal = iconeCustom.startsWith('fa-') ? iconeCustom : 'fa-solid fa-sparkles';
+      }
+
+      const tags = tagsRaw ? tagsRaw.split(',').filter(t => t.trim().length > 0) : ['Especialidade Prática'];
+      const salvas = JSON.parse(localStorage.getItem(CHAVE_SKILLS_EXTRAS) || '[]');
+
+      salvas.push({
+        id: Date.now(),
+        icone: iconeFinal,
+        titulo: titulo,
+        descricao: descricao || 'Domínio técnico e aplicação prática em projetos reais.',
+        tags: tags
+      });
+
+      localStorage.setItem(CHAVE_SKILLS_EXTRAS, JSON.stringify(salvas));
+      renderizarCompetenciasAdmin();
+      fecharModalCompetenciaAdmin();
+    }
+
+    function excluirCompetenciaAdmin(id) {
+      if (confirm('Deseja remover esta competência do seu portfólio?')) {
+        let salvas = JSON.parse(localStorage.getItem(CHAVE_SKILLS_EXTRAS) || '[]');
+        salvas = salvas.filter(item => item.id !== id);
+        localStorage.setItem(CHAVE_SKILLS_EXTRAS, JSON.stringify(salvas));
+        renderizarCompetenciasAdmin();
+      }
+    }
+
+    function gerarSugestaoIAAdmin() {
+      const titulo = document.getElementById('adminTituloSkill').value.trim();
+      const texto = document.getElementById('adminDescricaoSkill').value.trim();
+      const tags = document.getElementById('adminTagsSkill').value.trim();
+      const textarea = document.getElementById('adminDescricaoSkill');
+
+      const base = (texto || titulo || tags).toLowerCase();
+
+      if (base.includes('mobile') || base.includes('flutter') || base.includes('android')) {
+        textarea.value = "Desenvolvimento de aplicações móveis modernas e resilientes, priorizando arquitetura limpa, navegação fluida, persistência local de dados e integração eficiente com serviços em nuvem.";
+      } else if (base.includes('back') || base.includes('node') || base.includes('api') || base.includes('java')) {
+        textarea.value = "Engenharia de serviços backend e arquiteturas de APIs RESTful escaláveis, com foco em validação robusta de regras de negócio, alta disponibilidade, segurança e persistência estruturada.";
+      } else if (base.includes('front') || base.includes('react') || base.includes('ui') || base.includes('web')) {
+        textarea.value = "Concepção e implementação de interfaces web de alto padrão, combinando responsividade, consistência visual, boas práticas de acessibilidade e redução de fricção na experiência do usuário.";
+      } else if (base.includes('banco') || base.includes('sql') || base.includes('dados')) {
+        textarea.value = "Modelagem estratégica de dados relacionais e não-relacionais, assegurando integridade referencial, consultas otimizadas, consistência transacional e suporte a cenários de alto volume.";
+      } else {
+        textarea.value = `Domínio prático e estratégico em ${titulo || 'soluções corporativas'}, combinando metodologia analítica, resolução assertiva de problemas técnicos e compromisso com entregas escaláveis e bem documentadas.`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', verificarAutenticacao);
+  </script>
+</body>
+</html>

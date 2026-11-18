@@ -990,74 +990,15 @@
     }
 
     .btn-add-especializacao {
-      display: none;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: 9999px;
-      background: rgba(0, 71, 255, 0.12);
-      border: 1px solid rgba(0, 71, 255, 0.4);
-      color: #82aaff;
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.25s;
-    }
-
-    /* Exibição apenas no modo de edição do Marcos */
-    body.is-admin .btn-add-especializacao {
-      display: inline-flex !important;
-    }
-
-    body.is-admin .btn-delete-card {
-      display: inline-flex !important;
+      display: none !important;
     }
 
     .btn-delete-card {
-      display: none;
-      background: none;
-      border: none;
-      color: #ef4444;
-      font-size: 0.8rem;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
-      align-items: center;
-      gap: 4px;
-      margin-left: auto;
-      transition: background 0.2s;
+      display: none !important;
     }
 
-    /* Badge flutuante discreto no rodapé para alternar modo de edição */
     .admin-dock-pill {
-      position: fixed;
-      bottom: 16px;
-      left: 16px;
-      z-index: 999;
-      background: rgba(8, 12, 24, 0.8);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 9999px;
-      padding: 6px 14px;
-      font-size: 0.72rem;
-      color: #64748b;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .admin-dock-pill:hover {
-      color: #82aaff;
-      border-color: rgba(0, 71, 255, 0.4);
-      background: rgba(10, 15, 30, 0.95);
-    }
-
-    .admin-dock-pill.active {
-      color: #10b981;
-      border-color: #10b981;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+      display: none !important;
     }
 
     /* Botão Inteligente de IA para Descrições */
@@ -1678,12 +1619,6 @@
       </div>
     </div>
   </footer>
-
-  <!-- DOCK DE CONTROLE RESTRITO DO MARCOS (PARA ATIVAR/DESATIVAR MODO DE EDIÇÃO) -->
-  <div class="admin-dock-pill" id="adminDockPill" onclick="alternarModoEdicaoMarcos()" title="Modo exclusivo do Marcos para gerenciar competências e especializações">
-    <i class="fa-solid fa-lock" id="adminDockIcon"></i>
-    <span id="adminDockText">Área do Marcos</span>
-  </div>
 
   <!-- MODAL PARA ADICIONAR NOVA COMPETÊNCIA / ESPECIALIDADE -->
   <div class="modal-form-overlay" id="modalCompetencia" onclick="fecharModalNovaCompetencia(event)">
