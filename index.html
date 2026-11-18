@@ -340,15 +340,16 @@
     /* ANEL LUMINOSO BRANCO PURO (EXATAMENTE COMO NA FOTO DO LOUVRE) */
     .white-halo-ring {
       position: absolute;
-      width: 380px;
-      height: 380px;
+      width: 360px;
+      height: 360px;
       border-radius: 50%;
       border: 6px solid #FFFFFF;
       box-shadow: 
         0 0 35px rgba(255, 255, 255, 0.9),
         0 0 80px rgba(0, 71, 255, 0.7),
         inset 0 0 30px rgba(255, 255, 255, 0.5);
-      z-index: 1;
+      z-index: 3;
+      pointer-events: none;
       animation: pulseHalo 4s ease-in-out infinite alternate;
     }
 
@@ -363,19 +364,19 @@
       }
     }
 
-    /* A FOTO EM RELEVO P&B DE MARCOS VINÍCIUS */
+    /* A FOTO PERFEITAMENTE REDONDA - SEM NENHUMA PARTE TRANSPARENTE SOBRANDO */
     .sculpture-figure {
       position: relative;
       z-index: 2;
-      width: 320px;
-      height: 420px;
+      width: 360px;
+      height: 360px;
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
-      background: radial-gradient(circle at center, rgba(14, 23, 42, 0.9) 0%, rgba(5, 8, 17, 0.95) 100%);
-      border-radius: 160px 160px 24px 24px;
+      background: radial-gradient(circle at center, rgba(14, 23, 42, 0.95) 0%, rgba(5, 8, 17, 1) 100%);
+      border-radius: 50%;
       box-shadow: 0 20px 50px rgba(0,0,0,0.9);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: none;
       overflow: hidden;
       cursor: pointer;
     }
@@ -384,11 +385,9 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: top center;
-      border-radius: 160px 160px 24px 24px;
+      object-position: center top;
+      border-radius: 50%;
       filter: grayscale(100%) contrast(1.2) brightness(0.95);
-      mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
       display: none;
       transition: filter 0.3s;
     }
@@ -403,9 +402,10 @@
       height: 100%;
       color: #94a3b8;
       text-align: center;
-      padding: 30px 20px;
-      gap: 12px;
+      padding: 24px;
+      gap: 8px;
       user-select: none;
+      border-radius: 50%;
     }
 
     .avatar-empty-placeholder .icon-wrapper {
@@ -1052,7 +1052,7 @@
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .nav-menu { display: none; }
       .white-halo-ring { width: 300px; height: 300px; }
-      .sculpture-figure { width: 260px; height: 350px; }
+      .sculpture-figure { width: 300px; height: 300px; border-radius: 50%; }
     }
   </style>
 </head>
