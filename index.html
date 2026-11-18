@@ -1485,7 +1485,7 @@
   <!-- COMPETÊNCIAS & ENGENHARIA DE SOFTWARE -->
   <section class="skills-section" id="habilidades">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; margin-bottom: 40px;">
         <div>
           <div class="section-eyebrow">
             <i class="fa-solid fa-code"></i>
@@ -1493,10 +1493,15 @@
           </div>
           <h2 class="section-title">Competências & <strong>Especialidades</strong></h2>
         </div>
+        <button class="btn-add-especializacao" onclick="abrirModalNovaCompetencia()">
+          <i class="fa-solid fa-plus"></i>
+          <span>Adicionar Competência</span>
+        </button>
       </div>
 
-      <div class="skills-grid">
+      <div class="skills-grid" id="competenciasGrid">
         
+        <!-- Bloco 01 Original -->
         <div class="skill-block">
           <div class="skill-icon-header">
             <i class="fa-solid fa-laptop-code"></i>
@@ -1511,6 +1516,7 @@
           </div>
         </div>
 
+        <!-- Bloco 02 Original -->
         <div class="skill-block">
           <div class="skill-icon-header">
             <i class="fa-solid fa-server"></i>
@@ -1525,6 +1531,7 @@
           </div>
         </div>
 
+        <!-- Bloco 03 Original -->
         <div class="skill-block">
           <div class="skill-icon-header">
             <i class="fa-solid fa-database"></i>
@@ -1612,6 +1619,51 @@
       </div>
     </div>
   </footer>
+
+  <!-- MODAL PARA ADICIONAR NOVA COMPETÊNCIA / ESPECIALIDADE -->
+  <div class="modal-form-overlay" id="modalCompetencia" onclick="fecharModalNovaCompetencia(event)">
+    <div class="modal-form-card" onclick="event.stopPropagation()">
+      <h3><i class="fa-solid fa-code" style="color: #82aaff;"></i> Nova Competência / Especialidade</h3>
+      
+      <div class="form-input-group">
+        <label>Ícone Representativo:</label>
+        <select id="novoIconeCompetencia">
+          <option value="fa-solid fa-laptop-code">💻 Laptop / Código</option>
+          <option value="fa-solid fa-server">🖥️ Servidor / Backend</option>
+          <option value="fa-solid fa-database">🗄️ Banco de Dados</option>
+          <option value="fa-solid fa-mobile-screen">📱 Aplicativo Mobile</option>
+          <option value="fa-solid fa-shield-halved">🛡️ Segurança & Blindagem</option>
+          <option value="fa-solid fa-cloud">☁️ Nuvem & DevOps</option>
+          <option value="fa-solid fa-brain">🧠 Inteligência Artificial</option>
+          <option value="fa-solid fa-gear">⚙️ Ferramentas & Engenharia</option>
+        </select>
+      </div>
+
+      <div class="form-input-group">
+        <label>Título da Área / Competência:</label>
+        <input type="text" id="novoTituloCompetencia" placeholder="Ex: Mobile & Flutter / Cloud & DevOps">
+      </div>
+
+      <div class="form-input-group">
+        <label>Descrição da Competência:</label>
+        <textarea id="novaDescricaoCompetencia" placeholder="Descreva brevemente o foco ou atuação nessa área..."></textarea>
+      </div>
+
+      <div class="form-input-group">
+        <label>Tecnologias / Tags (separadas por vírgula):</label>
+        <input type="text" id="novasTagsCompetencia" placeholder="Ex: Flutter, Dart, Android Nativo, Clean Architecture">
+      </div>
+
+      <div class="modal-form-actions">
+        <button class="btn-ghost-editorial" onclick="fecharModalNovaCompetencia()" style="padding: 8px 18px;">
+          Cancelar
+        </button>
+        <button class="btn-primary-sculpture" onclick="salvarNovaCompetencia()" style="padding: 8px 22px;">
+          <i class="fa-solid fa-plus"></i> Adicionar
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL PARA ADICIONAR NOVA ESPECIALIZAÇÃO -->
   <div class="modal-form-overlay" id="modalEspecializacao" onclick="fecharModalNovaEspecializacao(event)">
@@ -1821,9 +1873,120 @@
     document.addEventListener('DOMContentLoaded', () => {
       carregarFotoPerfil();
       renderizarEspecializacoes();
+      renderizarCompetencias();
     });
     carregarFotoPerfil();
     renderizarEspecializacoes();
+    renderizarCompetencias();
+
+    /* ==========================================================================
+       GERENCIAMENTO DINÂMICO DE COMPETÊNCIAS & ESPECIALIDADES EXTRAS
+       ========================================================================== */
+    const CHAVE_SKILLS_EXTRAS = 'marcos_competencias_extras_v1';
+
+    function obterCompetenciasExtras() {
+      const salvas = localStorage.getItem(CHAVE_SKILLS_EXTRAS);
+      if (salvas) {
+        try {
+          return JSON.parse(salvas);
+        } catch (e) {
+          return [];
+        }
+      }
+      return [];
+    }
+
+    function salvarCompetenciasExtras(lista) {
+      try {
+        localStorage.setItem(CHAVE_SKILLS_EXTRAS, JSON.stringify(lista));
+      } catch (e) {
+        console.warn('Erro ao salvar competências:', e);
+      }
+    }
+
+    let extrasCompetencias = obterCompetenciasExtras();
+
+    function renderizarCompetencias() {
+      const grid = document.getElementById('competenciasGrid');
+      if (!grid) return;
+
+      // Mantém os 3 blocos originais fixos intactos
+      const cardsOriginais = Array.from(grid.children).slice(0, 3);
+      grid.innerHTML = '';
+      cardsOriginais.forEach(c => grid.appendChild(c));
+
+      // Renderiza os novos blocos criados pelo usuário
+      extrasCompetencias.forEach(item => {
+        const block = document.createElement('div');
+        block.className = 'skill-block';
+
+        const tagsHtml = (item.tags || []).map(t => `<span class="skill-tag-item">${t.trim()}</span>`).join('');
+
+        block.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <div class="skill-icon-header">
+              <i class="${item.icone || 'fa-solid fa-code'}"></i>
+            </div>
+            <button class="btn-delete-card" onclick="removerCompetenciaExtra(${item.id})" title="Remover esta competência">
+              <i class="fa-solid fa-trash-can"></i> Excluir
+            </button>
+          </div>
+          <h4>${item.titulo}</h4>
+          <p>${item.descricao}</p>
+          <div class="skill-tags">
+            ${tagsHtml}
+          </div>
+        `;
+        grid.appendChild(block);
+      });
+    }
+
+    function abrirModalNovaCompetencia() {
+      document.getElementById('novoTituloCompetencia').value = '';
+      document.getElementById('novaDescricaoCompetencia').value = '';
+      document.getElementById('novasTagsCompetencia').value = '';
+      document.getElementById('modalCompetencia').style.display = 'flex';
+    }
+
+    function fecharModalNovaCompetencia(e) {
+      if (e && e.target !== e.currentTarget && !e.target.classList.contains('btn-ghost-editorial')) return;
+      document.getElementById('modalCompetencia').style.display = 'none';
+    }
+
+    function salvarNovaCompetencia() {
+      const titulo = document.getElementById('novoTituloCompetencia').value.trim();
+      const descricao = document.getElementById('novaDescricaoCompetencia').value.trim();
+      const tagsRaw = document.getElementById('novasTagsCompetencia').value.trim();
+      const icone = document.getElementById('novoIconeCompetencia').value;
+
+      if (!titulo) {
+        alert('Por favor, informe o título da competência.');
+        return;
+      }
+
+      const tags = tagsRaw ? tagsRaw.split(',').filter(t => t.trim().length > 0) : ['Especialidade Prática'];
+
+      const novoItem = {
+        id: Date.now(),
+        icone: icone,
+        titulo: titulo,
+        descricao: descricao || 'Domínio técnico e aplicação prática em projetos reais.',
+        tags: tags
+      };
+
+      extrasCompetencias.push(novoItem);
+      salvarCompetenciasExtras(extrasCompetencias);
+      renderizarCompetencias();
+      fecharModalNovaCompetencia();
+    }
+
+    function removerCompetenciaExtra(id) {
+      if (confirm('Deseja excluir esta competência da sua lista?')) {
+        extrasCompetencias = extrasCompetencias.filter(item => item.id !== id);
+        salvarCompetenciasExtras(extrasCompetencias);
+        renderizarCompetencias();
+      }
+    }
 
     /* ==========================================================================
        GERENCIAMENTO DINÂMICO DE ESPECIALIZAÇÕES & CURSOS EXTRAS
