@@ -372,6 +372,12 @@
       display: flex;
       align-items: flex-end;
       justify-content: center;
+      background: radial-gradient(circle at center, rgba(14, 23, 42, 0.9) 0%, rgba(5, 8, 17, 0.95) 100%);
+      border-radius: 160px 160px 24px 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+      cursor: pointer;
     }
 
     .sculpture-figure img {
@@ -380,11 +386,238 @@
       object-fit: cover;
       object-position: top center;
       border-radius: 160px 160px 24px 24px;
-      filter: grayscale(100%) contrast(1.25) brightness(0.92);
+      filter: grayscale(100%) contrast(1.2) brightness(0.95);
       mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+      display: none;
+      transition: filter 0.3s;
+    }
+
+    /* PLACEHOLDER QUANDO NÃO HÁ FOTO (ESTILO INSTAGRAM/WHATSAPP) */
+    .avatar-empty-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      color: #94a3b8;
+      text-align: center;
+      padding: 30px 20px;
+      gap: 12px;
+      user-select: none;
+    }
+
+    .avatar-empty-placeholder .icon-wrapper {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: rgba(0, 71, 255, 0.12);
+      border: 2px dashed rgba(0, 71, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: #38bdf8;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .sculpture-figure:hover .avatar-empty-placeholder .icon-wrapper {
+      transform: scale(1.08);
+      background: rgba(0, 71, 255, 0.22);
+    }
+
+    .avatar-empty-placeholder .title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .avatar-empty-placeholder .subtitle {
+      font-size: 0.78rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    .avatar-action-pill {
+      margin-top: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0047FF;
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(0, 71, 255, 0.4);
+    }
+
+    /* BOTÃO FLUTUANTE DE CÂMERA (SEMPRE DISPONÍVEL NO CANTO DA FOTO) */
+    .btn-camera-trigger {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 10;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(8, 12, 24, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+      transition: transform 0.2s, background 0.2s, color 0.2s;
+    }
+
+    .btn-camera-trigger:hover {
+      transform: scale(1.1);
+      background: #0047FF;
+      color: #ffffff;
+      border-color: #0047FF;
+    }
+
+    /* BOTTOM SHEET / MODAL ESTILO INSTAGRAM / WHATSAPP */
+    .avatar-sheet-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .avatar-sheet-card {
+      background: #0a0f1d;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 420px;
+      padding: 24px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+      animation: sheetPop 0.25s ease-out;
+    }
+
+    @keyframes sheetPop {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .avatar-sheet-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .avatar-sheet-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar-sheet-close {
+      background: none;
+      border: none;
+      color: #64748b;
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .avatar-sheet-close:hover { color: #fff; }
+
+    .avatar-option-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+      text-align: left;
+    }
+
+    .avatar-option-btn:hover {
+      background: rgba(0, 71, 255, 0.15);
+      border-color: rgba(0, 71, 255, 0.4);
+      color: #ffffff;
+      transform: translateX(4px);
+    }
+
+    .avatar-option-btn i {
+      font-size: 1.25rem;
+      width: 24px;
+      text-align: center;
+      color: #38bdf8;
+    }
+
+    .avatar-option-btn.btn-remove {
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+    .avatar-option-btn.btn-remove i { color: #ef4444; }
+    .avatar-option-btn.btn-remove:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #ef4444;
+      color: #fca5a5;
+    }
+
+    /* MODAL DE CÂMERA AO VIVO */
+    .camera-live-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 2500;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .camera-live-card {
+      background: #0b0f19;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 480px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .camera-live-card video {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #000;
+      margin-bottom: 16px;
       border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .camera-live-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
     }
 
     /* CARD FLUTUANTE DE METADADOS (ESTILO LEGENDAS DE MUSEU) */
@@ -898,15 +1131,31 @@
         <!-- O Anel Branco Luminoso Idêntico ao da Imagem de Referência -->
         <div class="white-halo-ring"></div>
 
-        <!-- A Foto de Marcos Vinícius em P&B de Estúdio -->
-        <div class="sculpture-figure">
-          <img src="marcos-sunglasses-real-pb.png" alt="Marcos Vinícius dos Santos">
+        <!-- Botão de Câmera Rápido estilo WhatsApp/Instagram -->
+        <button class="btn-camera-trigger" onclick="abrirMenuFoto(event)" title="Mudar ou Tirar Foto">
+          <i class="fa-solid fa-camera"></i>
+        </button>
+
+        <!-- Campo Interativo de Foto de Perfil -->
+        <div class="sculpture-figure" id="sculptureFigure" onclick="abrirMenuFoto(event)">
+          <img id="avatarImage" src="" alt="Foto de Marcos Vinícius">
+          
+          <div class="avatar-empty-placeholder" id="avatarPlaceholder">
+            <div class="icon-wrapper">
+              <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <div class="title">Adicionar Foto de Perfil</div>
+            <div class="subtitle">Toque para escolher da galeria<br>ou tirar foto agora</div>
+            <div class="avatar-action-pill">
+              <i class="fa-solid fa-camera"></i> Escolher Foto
+            </div>
+          </div>
         </div>
 
         <!-- Tag Flutuante com Metadados de Autoridade -->
         <div class="museum-tag-card">
           <div class="tag-subtitle">Localização & Foco</div>
-          <div class="tag-title">Salvador - BA • Brasil • Remoto</div>
+          <div class="tag-title">SAJ - BA • Brasil • Remoto</div>
         </div>
       </div>
 
@@ -1210,6 +1459,173 @@
       </div>
     </div>
   </footer>
+
+  <!-- MODAL / MENU DE ESCOLHA DE FOTO (ESTILO INSTAGRAM / WHATSAPP) -->
+  <div class="avatar-sheet-overlay" id="avatarMenuModal" onclick="fecharMenuFoto(event)">
+    <div class="avatar-sheet-card" onclick="event.stopPropagation()">
+      <div class="avatar-sheet-header">
+        <h3><i class="fa-solid fa-circle-user" style="color: #38bdf8;"></i> Foto de Perfil</h3>
+        <button class="avatar-sheet-close" onclick="fecharMenuFoto()">&times;</button>
+      </div>
+
+      <!-- Opção 1: Escolher foto da galeria / arquivos -->
+      <button class="avatar-option-btn" onclick="acionarInputArquivo()">
+        <i class="fa-solid fa-images"></i>
+        <span>Escolher da Galeria / Arquivos</span>
+      </button>
+
+      <!-- Opção 2: Tirar foto agora pela câmera -->
+      <button class="avatar-option-btn" onclick="abrirCameraAoVivo()">
+        <i class="fa-solid fa-camera"></i>
+        <span>Tirar Foto Agora (Câmera)</span>
+      </button>
+
+      <!-- Opção 3: Remover foto atual -->
+      <button class="avatar-option-btn btn-remove" id="btnRemoverFoto" onclick="removerFotoPerfil()" style="display: none;">
+        <i class="fa-solid fa-trash-can"></i>
+        <span>Remover Foto Atual</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL DE CÂMERA AO VIVO -->
+  <div class="camera-live-modal" id="cameraLiveModal">
+    <div class="camera-live-card">
+      <h3 style="color: #fff; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <i class="fa-solid fa-camera" style="color: #38bdf8;"></i> Tirar Foto de Perfil
+      </h3>
+      <video id="cameraVideo" autoplay playsinline></video>
+      <canvas id="cameraCanvas" style="display: none;"></canvas>
+      <div class="camera-live-actions">
+        <button class="btn-ghost-editorial" onclick="fecharCameraAoVivo()" style="padding: 10px 20px;">
+          Cancelar
+        </button>
+        <button class="btn-primary-sculpture" onclick="capturarFotoCamera()" style="padding: 10px 24px;">
+          <i class="fa-solid fa-camera"></i> Capturar Foto
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input de arquivo invisível para galeria -->
+  <input type="file" id="inputFotoArquivo" accept="image/*" style="display: none;" onchange="processarFotoArquivo(this)">
+
+  <script>
+    const CHAVE_FOTO_STORAGE = 'marcos_foto_perfil_custom';
+    let streamCamera = null;
+
+    function carregarFotoPerfil() {
+      const img = document.getElementById('avatarImage');
+      const placeholder = document.getElementById('avatarPlaceholder');
+      const btnRemover = document.getElementById('btnRemoverFoto');
+      const fotoSalva = localStorage.getItem(CHAVE_FOTO_STORAGE);
+
+      if (fotoSalva) {
+        img.src = fotoSalva;
+        img.style.display = 'block';
+        placeholder.style.display = 'none';
+        if (btnRemover) btnRemover.style.display = 'flex';
+      } else {
+        img.src = '';
+        img.style.display = 'none';
+        placeholder.style.display = 'flex';
+        if (btnRemover) btnRemover.style.display = 'none';
+      }
+    }
+
+    function abrirMenuFoto(e) {
+      if (e) e.stopPropagation();
+      const modal = document.getElementById('avatarMenuModal');
+      const btnRemover = document.getElementById('btnRemoverFoto');
+      const temFoto = !!localStorage.getItem(CHAVE_FOTO_STORAGE);
+      if (btnRemover) {
+        btnRemover.style.display = temFoto ? 'flex' : 'none';
+      }
+      modal.style.display = 'flex';
+    }
+
+    function fecharMenuFoto(e) {
+      if (e && e.target !== e.currentTarget && !e.target.classList.contains('avatar-sheet-close')) return;
+      document.getElementById('avatarMenuModal').style.display = 'none';
+    }
+
+    function acionarInputArquivo() {
+      fecharMenuFoto();
+      document.getElementById('inputFotoArquivo').click();
+    }
+
+    function processarFotoArquivo(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          salvarFotoPerfil(e.target.result);
+          input.value = '';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function salvarFotoPerfil(dataUrl) {
+      try {
+        localStorage.setItem(CHAVE_FOTO_STORAGE, dataUrl);
+      } catch (err) {
+        console.warn('LocalStorage cheio, exibindo em sessão:', err);
+      }
+      carregarFotoPerfil();
+    }
+
+    function removerFotoPerfil() {
+      localStorage.removeItem(CHAVE_FOTO_STORAGE);
+      carregarFotoPerfil();
+      fecharMenuFoto();
+    }
+
+    // Gerenciador de Câmera ao Vivo
+    async function abrirCameraAoVivo() {
+      fecharMenuFoto();
+      const modal = document.getElementById('cameraLiveModal');
+      const video = document.getElementById('cameraVideo');
+
+      try {
+        streamCamera = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 720 }, height: { ideal: 960 } },
+          audio: false
+        });
+        video.srcObject = streamCamera;
+        modal.style.display = 'flex';
+      } catch (err) {
+        alert('Não foi possível acessar a câmera do dispositivo. Verifique as permissões ou use a opção "Escolher da Galeria".');
+      }
+    }
+
+    function fecharCameraAoVivo() {
+      if (streamCamera) {
+        streamCamera.getTracks().forEach(track => track.stop());
+        streamCamera = null;
+      }
+      document.getElementById('cameraLiveModal').style.display = 'none';
+    }
+
+    function capturarFotoCamera() {
+      const video = document.getElementById('cameraVideo');
+      const canvas = document.getElementById('cameraCanvas');
+      if (!video.videoWidth) return;
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+
+      fecharCameraAoVivo();
+      salvarFotoPerfil(dataUrl);
+    }
+
+    // Inicializar na carga
+    document.addEventListener('DOMContentLoaded', carregarFotoPerfil);
+    carregarFotoPerfil();
+  </script>
 
 </body>
 </html>
