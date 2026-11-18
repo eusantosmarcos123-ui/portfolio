@@ -623,13 +623,16 @@
         <i class="fa-solid fa-key"></i> Entrar no Painel
       </button>
 
+      <button type="button" class="btn-auth-submit" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(0, 71, 255, 0.35); color: #38bdf8; margin-top: 10px;" onclick="mostrarTelaAuth('esqueci')">
+        <i class="fa-solid fa-key"></i> Alterar Minha Senha
+      </button>
+
       <div id="authErrorMsg" style="display: none; color: #ef4444; font-size: 0.8rem; margin-top: 14px;">
         <i class="fa-solid fa-circle-exclamation"></i> Senha incorreta. Acesso restrito a Marcos Vinícius.
       </div>
 
-      <div class="auth-links">
-        <a onclick="mostrarTelaAuth('criar')"><i class="fa-solid fa-user-plus"></i> Criar / Redefinir Senha</a>
-        <a onclick="mostrarTelaAuth('esqueci')"><i class="fa-solid fa-rotate-left"></i> Esqueci a Senha</a>
+      <div class="auth-links" style="justify-content: center; margin-top: 16px;">
+        <a onclick="mostrarTelaAuth('criar')"><i class="fa-solid fa-user-plus"></i> Primeiro Acesso / Criar Senha</a>
       </div>
     </div>
 
