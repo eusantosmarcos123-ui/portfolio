@@ -522,6 +522,82 @@
       cursor: pointer;
       font-weight: 700;
     }
+
+    /* ESTILOS DO CONSOLE DO BANCO DE DADOS SQL */
+    .sql-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      background: #02050e;
+    }
+
+    .sql-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      text-align: left;
+    }
+
+    .sql-table th {
+      background: rgba(0, 71, 255, 0.15);
+      color: #93c5fd;
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(0, 71, 255, 0.3);
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+    }
+
+    .sql-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .sql-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .hash-pill {
+      font-family: var(--font-mono);
+      background: rgba(56, 189, 248, 0.1);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+    }
+
+    .sql-console {
+      background: #010307;
+      border: 1px solid rgba(0, 71, 255, 0.25);
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: #38bdf8;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    .sql-console-line {
+      margin-bottom: 6px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .sql-console-line .prompt-symbol {
+      color: #818cf8;
+      user-select: none;
+    }
   </style>
 </head>
 <body>
@@ -694,6 +770,53 @@
 
         <div class="items-list" id="listaCompetenciasAdmin">
           <!-- Renderizado dinamicamente -->
+        </div>
+      </div>
+
+      <!-- SEÇÃO 3: PAINEL DO BANCO DE DADOS SQL -->
+      <div class="panel-box" style="grid-column: 1 / -1; margin-top: 10px;">
+        <div class="panel-box-header">
+          <div>
+            <h2><i class="fa-solid fa-database" style="color: #38bdf8;"></i> Painel do Banco de Dados SQL</h2>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+              Gerenciamento relacional da tabela <code style="color: #93c5fd;">admin_credentials</code> com criptografia SHA-256 e Salt.
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-topbar" onclick="recarregarPainelSQL()" style="padding: 6px 14px; font-size: 0.8rem; background: rgba(0, 71, 255, 0.2); border: 1px solid rgba(0, 71, 255, 0.4); color: #93c5fd;">
+              <i class="fa-solid fa-rotate"></i> Atualizar Consulta
+            </button>
+          </div>
+        </div>
+
+        <!-- VISUALIZAÇÃO DOS REGISTROS DA TABELA SQL -->
+        <div class="sql-table-wrapper">
+          <table class="sql-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Usuário</th>
+                <th>E-mail Autorizado</th>
+                <th>Hash da Senha (SHA-256)</th>
+                <th>Salt Criptográfico</th>
+                <th>Hash do E-mail</th>
+                <th>Última Atualização</th>
+              </tr>
+            </thead>
+            <tbody id="sqlTableBody">
+              <!-- Renderizado dinamicamente -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- CONSOLE / HISTÓRICO DE COMANDOS SQL (DDL / DML) -->
+        <div style="margin-top: 16px;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">
+            <i class="fa-solid fa-terminal"></i> Console de Execuções SQL (Audit Trail):
+          </div>
+          <div class="sql-console" id="sqlConsoleOutput">
+            <!-- Log de comandos SQL executados -->
+          </div>
         </div>
       </div>
 
@@ -1084,6 +1207,45 @@
 
       alert('Senha do painel atualizada e criptografada com sucesso no banco SQL!');
       fecharModalAlterarSenhaDash();
+      recarregarPainelSQL();
+    }
+
+    /* RENDERIZAÇÃO DO PAINEL DO BANCO DE DADOS SQL */
+    function recarregarPainelSQL() {
+      const tbody = document.getElementById('sqlTableBody');
+      const consoleOutput = document.getElementById('sqlConsoleOutput');
+      if (!tbody) return;
+
+      const db = JSON.parse(localStorage.getItem(CHAVE_SQL_DB) || '{"tables":{"admin_credentials":{"rows":[]}},"sql_log":[]}');
+      const rows = db.tables?.admin_credentials?.rows || [];
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #64748b; padding: 20px;">Nenhum registro encontrado na tabela admin_credentials.</td></tr>`;
+      } else {
+        tbody.innerHTML = rows.map(r => `
+          <tr>
+            <td><strong style="color: #38bdf8;">${r.id}</strong></td>
+            <td><span style="color: #f1f5f9; font-weight: 600;">${r.username}</span></td>
+            <td><span style="color: #34d399;">${r.email || 'eusantosmarcos123@gmail.com'}</span></td>
+            <td title="${r.password_hash}"><span class="hash-pill">${r.password_hash.substring(0, 16)}...</span></td>
+            <td title="${r.salt}"><span style="color: #94a3b8; font-family: var(--font-mono);">${r.salt.substring(0, 10)}...</span></td>
+            <td title="${r.email_auth_hash || ''}"><span class="hash-pill" style="border-color: rgba(52, 211, 153, 0.4); color: #34d399;">${(r.email_auth_hash || '').substring(0, 16)}...</span></td>
+            <td style="color: #94a3b8; font-size: 0.75rem;">${r.updated_at ? new Date(r.updated_at).toLocaleString('pt-BR') : '-'}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Renderizar logs do console SQL
+      if (consoleOutput) {
+        const logs = db.sql_log || [];
+        consoleOutput.innerHTML = logs.map(cmd => `
+          <div class="sql-console-line">
+            <span class="prompt-symbol">sql&gt;</span>
+            <span>${cmd}</span>
+          </div>
+        `).join('');
+        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+      }
     }
 
     function verificarAutenticacao() {
@@ -1102,6 +1264,7 @@
     function carregarDadosAdmin() {
       renderizarEspecializacoesAdmin();
       renderizarCompetenciasAdmin();
+      recarregarPainelSQL();
     }
 
     /* GESTÃO DE ESPECIALIZAÇÕES */
