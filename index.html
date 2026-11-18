@@ -1887,59 +1887,13 @@
       salvarFotoPerfil(dataUrl);
     }
 
-    // Controle Exclusivo do Marcos (Modo Administrador)
-    const CHAVE_ADMIN_MODE = 'marcos_modo_edicao_ativo';
-
-    function verificarModoEdicaoMarcos() {
-      const ativo = localStorage.getItem(CHAVE_ADMIN_MODE) === 'true';
-      const pill = document.getElementById('adminDockPill');
-      const icon = document.getElementById('adminDockIcon');
-      const text = document.getElementById('adminDockText');
-
-      if (ativo) {
-        document.body.classList.add('is-admin');
-        if (pill) pill.classList.add('active');
-        if (icon) icon.className = 'fa-solid fa-lock-open';
-        if (text) text.textContent = 'Modo Edição Ativo (Marcos)';
-      } else {
-        document.body.classList.remove('is-admin');
-        if (pill) pill.classList.remove('active');
-        if (icon) icon.className = 'fa-solid fa-lock';
-        if (text) text.textContent = 'Área do Marcos';
-      }
-    }
-
-    function alternarModoEdicaoMarcos() {
-      const estaAtivo = localStorage.getItem(CHAVE_ADMIN_MODE) === 'true';
-      if (estaAtivo) {
-        localStorage.removeItem(CHAVE_ADMIN_MODE);
-        verificarModoEdicaoMarcos();
-        alert('Modo de edição desativado. Visitantes verão seu portfólio limpo e sem botões de alterar.');
-      } else {
-        const senha = prompt('Área Exclusiva de Marcos Vinícius.\nDigite sua senha de acesso para habilitar os botões de adicionar e alterar:');
-        if (senha === 'marcos' || senha === '123' || senha === 'marcos123' || senha === 'admin') {
-          localStorage.setItem(CHAVE_ADMIN_MODE, 'true');
-          verificarModoEdicaoMarcos();
-          alert('Acesso liberado com sucesso, Marcos! Os botões de adicionar e alterar especializações/competências já estão visíveis para você.');
-        } else if (senha !== null) {
-          alert('Senha incorreta. Apenas Marcos Vinícius possui permissão para editar.');
-        }
-      }
-    }
-
     // Inicializar na carga
     document.addEventListener('DOMContentLoaded', () => {
-      verificarModoEdicaoMarcos();
       carregarFotoPerfil();
       renderizarEspecializacoes();
       renderizarCompetencias();
       carregarProjetosDoGitHub();
     });
-    verificarModoEdicaoMarcos();
-    carregarFotoPerfil();
-    renderizarEspecializacoes();
-    renderizarCompetencias();
-    carregarProjetosDoGitHub();
 
     /* ==========================================================================
        SINCRONIZAÇÃO AUTOMÁTICA EM TEMPO REAL COM O GITHUB

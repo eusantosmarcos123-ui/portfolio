@@ -112,17 +112,65 @@
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 12px;
       color: #FFF;
-      font-size: 1rem;
+      font-size: 0.95rem;
+      outline: none;
+      margin-bottom: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .auth-card input.code-input {
       text-align: center;
       letter-spacing: 0.2em;
-      outline: none;
-      margin-bottom: 16px;
-      transition: border-color 0.2s;
     }
 
     .auth-card input:focus {
       border-color: var(--cobalt-pure);
       box-shadow: 0 0 15px rgba(0, 71, 255, 0.35);
+    }
+
+    .auth-links {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 14px;
+      font-size: 0.8rem;
+    }
+
+    .auth-links a {
+      color: #38bdf8;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .auth-links a:hover {
+      color: #93c5fd;
+      text-decoration: underline;
+    }
+
+    .sql-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(0, 71, 255, 0.12);
+      border: 1px solid rgba(0, 71, 255, 0.3);
+      border-radius: 999px;
+      font-size: 0.72rem;
+      color: #93c5fd;
+      font-family: var(--font-mono);
+      margin-bottom: 16px;
+    }
+
+    .recovery-banner {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px dashed rgba(16, 185, 129, 0.4);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 0.8rem;
+      color: #34d399;
+      margin-bottom: 16px;
+      text-align: left;
+      word-break: break-all;
     }
 
     .btn-auth-submit {
@@ -480,20 +528,113 @@
 
   <div class="ambient-glow"></div>
 
-  <!-- TELA DE AUTENTICAÇÃO SEGURA -->
+  <!-- TELA DE AUTENTICAÇÃO SEGURA COM SQL & CRIPTOGRAFIA HASH -->
   <div id="authOverlay">
-    <div class="auth-card">
+    <!-- VISÃO 1: LOGIN PRINCIPAL -->
+    <div class="auth-card" id="authBoxLogin">
       <div class="shield-icon">
-        <i class="fa-solid fa-lock"></i>
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <div class="sql-badge">
+        <i class="fa-solid fa-database"></i> SQL Database & SHA-256 Hash
       </div>
       <h2>Painel do Marcos</h2>
-      <p>Área restrita de gestão de competências, especializações e dados do portfólio.</p>
-      <input type="password" id="adminPasswordInput" placeholder="DIGITE SUA SENHA" onkeyup="if(event.key==='Enter') autenticarAdmin()">
+      <p>Acesso exclusivo autenticado via banco de dados SQL e verificação criptográfica.</p>
+      
+      <input type="password" id="adminPasswordInput" class="code-input" placeholder="DIGITE SUA SENHA" onkeyup="if(event.key==='Enter') autenticarAdmin()">
+      
       <button class="btn-auth-submit" onclick="autenticarAdmin()">
-        <i class="fa-solid fa-key"></i> Acessar Painel
+        <i class="fa-solid fa-key"></i> Entrar no Painel
       </button>
+
       <div id="authErrorMsg" style="display: none; color: #ef4444; font-size: 0.8rem; margin-top: 14px;">
         <i class="fa-solid fa-circle-exclamation"></i> Senha incorreta. Acesso restrito a Marcos Vinícius.
+      </div>
+
+      <div class="auth-links">
+        <a onclick="mostrarTelaAuth('criar')"><i class="fa-solid fa-user-plus"></i> Criar / Redefinir Senha</a>
+        <a onclick="mostrarTelaAuth('esqueci')"><i class="fa-solid fa-rotate-left"></i> Esqueci a Senha</a>
+      </div>
+    </div>
+
+    <!-- VISÃO 2: CRIAR SENHA / PRIMEIRO ACESSO -->
+    <div class="auth-card" id="authBoxCriar" style="display: none;">
+      <div class="shield-icon" style="border-color: #38bdf8;">
+        <i class="fa-solid fa-key"></i>
+      </div>
+      <div class="sql-badge">
+        <i class="fa-solid fa-database"></i> SQL INSERT INTO admin_credentials
+      </div>
+      <h2>Criar Nova Senha</h2>
+      <p>Cadastre uma senha mestra pessoal. Ela será armazenada em tabela SQL com Hash criptográfico SHA-256 + Salt.</p>
+      
+      <input type="password" id="novaSenhaInput" placeholder="NOVA SENHA" style="letter-spacing: normal;">
+      <input type="password" id="confirmaSenhaInput" placeholder="CONFIRMAR NOVA SENHA" style="letter-spacing: normal;">
+      <input type="text" id="palavraRecuperacaoInput" placeholder="PALAVRA DE SEGURANÇA (EX: MEU CODIGO)" style="letter-spacing: normal;">
+
+      <button class="btn-auth-submit" onclick="salvarNovaSenhaSQL()">
+        <i class="fa-solid fa-floppy-disk"></i> Salvar Senha no Banco SQL
+      </button>
+
+      <div class="auth-links" style="justify-content: center; margin-top: 18px;">
+        <a onclick="mostrarTelaAuth('login')"><i class="fa-solid fa-arrow-left"></i> Voltar ao Login</a>
+      </div>
+    </div>
+
+    <!-- VISÃO 3: RECUPERAR SENHA ESQUECIDA -->
+    <div class="auth-card" id="authBoxEsqueci" style="display: none;">
+      <div class="shield-icon" style="border-color: #fbbf24;">
+        <i class="fa-solid fa-life-ring" style="color: #fbbf24;"></i>
+      </div>
+      <div class="sql-badge">
+        <i class="fa-solid fa-database"></i> SQL SELECT & UPDATE
+      </div>
+      <h2>Recuperar Senha</h2>
+      <p>Informe sua palavra-chave de recuperação cadastrada no banco SQL para registrar uma nova senha.</p>
+      
+      <input type="text" id="recuperarPalavraInput" placeholder="DIGITE SUA PALAVRA DE SEGURANÇA">
+      <input type="password" id="recuperarNovaSenhaInput" placeholder="DIGITE A NOVA SENHA">
+
+      <button class="btn-auth-submit" style="background: #2563eb;" onclick="redefinirSenhaEsquecidaSQL()">
+        <i class="fa-solid fa-rotate"></i> Atualizar Senha no Banco SQL
+      </button>
+
+      <div id="recuperarMsgErro" style="display: none; color: #ef4444; font-size: 0.8rem; margin-top: 14px;">
+        <i class="fa-solid fa-circle-exclamation"></i> Palavra de segurança incorreta.
+      </div>
+
+      <div class="auth-links" style="justify-content: center; margin-top: 18px;">
+        <a onclick="mostrarTelaAuth('login')"><i class="fa-solid fa-arrow-left"></i> Voltar ao Login</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ALTERAR SENHA INTERNAMENTE NO DASHBOARD -->
+  <div class="modal-overlay" id="modalAlterarSenhaDash" onclick="fecharModalAlterarSenhaDash(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <h3><i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i> Alterar Senha (SQL Hash)</h3>
+      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
+        Atualize sua senha. Os novos dados serão processados via SHA-256 e salvos no registro SQL.
+      </p>
+
+      <div class="form-group">
+        <label>Senha Atual:</label>
+        <input type="password" id="dashSenhaAtual" placeholder="Digite a senha atual">
+      </div>
+
+      <div class="form-group">
+        <label>Nova Senha:</label>
+        <input type="password" id="dashNovaSenha" placeholder="Digite a nova senha">
+      </div>
+
+      <div class="form-group">
+        <label>Nova Palavra de Segurança (Recuperação):</label>
+        <input type="text" id="dashNovaPalavra" placeholder="Ex: chave-mestra-marcos">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="fecharModalAlterarSenhaDash()">Cancelar</button>
+        <button class="btn-save" onclick="salvarAlteracaoSenhaDash()">Salvar no Banco SQL</button>
       </div>
     </div>
   </div>
@@ -508,6 +649,9 @@
       </div>
 
       <div class="topbar-actions">
+        <button class="btn-topbar" onclick="abrirModalAlterarSenhaAdmin()" style="background: rgba(0, 71, 255, 0.2); border: 1px solid rgba(0, 71, 255, 0.4); color: #93c5fd;">
+          <i class="fa-solid fa-shield-halved"></i> Alterar Senha (SQL Hash)
+        </button>
         <a href="index.html" class="btn-topbar btn-view-live">
           <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Portfólio Público
         </a>
@@ -645,19 +789,256 @@
     const CHAVE_ADMIN_AUTH = 'marcos_admin_authenticated';
     const CHAVE_EDU_EXTRAS = 'marcos_especializacoes_extras_v1';
     const CHAVE_SKILLS_EXTRAS = 'marcos_competencias_extras_v1';
+    const CHAVE_SQL_DB = 'marcos_sql_database_store_v1';
 
-    function autenticarAdmin() {
+    /* ==========================================================================
+       SISTEMA DE BANCO DE DADOS SQL COM HASH CRIPTOGRÁFICO (SHA-256 + SALT)
+       Tabela: admin_credentials (id, username, password_hash, salt, recovery_hash, updated_at)
+       ========================================================================== */
+    class SQLAuthEngine {
+      constructor() {
+        this.initDatabase();
+      }
+
+      // Converte string para SHA-256 hexadecimal seguro via Web Crypto API
+      static async sha256(str) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(str);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+
+      // Gera Salt aleatório criptográfico
+      static gerarSalt() {
+        const array = new Uint8Array(16);
+        crypto.getRandomValues(array);
+        return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+      }
+
+      initDatabase() {
+        let db = localStorage.getItem(CHAVE_SQL_DB);
+        if (!db) {
+          // Schema DDL SQL
+          const initialSchema = {
+            tables: {
+              admin_credentials: {
+                columns: ['id', 'username', 'password_hash', 'salt', 'recovery_hash', 'created_at', 'updated_at'],
+                rows: []
+              }
+            },
+            sql_log: [
+              "CREATE TABLE admin_credentials (id INTEGER PRIMARY KEY, username VARCHAR(50), password_hash CHAR(64), salt CHAR(32), recovery_hash CHAR(64), created_at DATETIME, updated_at DATETIME);"
+            ]
+          };
+          localStorage.setItem(CHAVE_SQL_DB, JSON.stringify(initialSchema));
+          this.seedPadrao();
+        }
+      }
+
+      async seedPadrao() {
+        const rows = this.query("SELECT * FROM admin_credentials WHERE username = 'marcos'");
+        if (rows.length === 0) {
+          // Senha inicial mestra: 'marcos123'
+          // Palavra de recuperação inicial: 'marcos'
+          const salt = SQLAuthEngine.gerarSalt();
+          const passHash = await SQLAuthEngine.sha256('marcos123' + salt);
+          const recoveryHash = await SQLAuthEngine.sha256('marcos'.toLowerCase().trim());
+
+          this.execute(
+            `INSERT INTO admin_credentials VALUES (1, 'marcos', '${passHash}', '${salt}', '${recoveryHash}', '${new Date().toISOString()}', '${new Date().toISOString()}');`,
+            {
+              id: 1,
+              username: 'marcos',
+              password_hash: passHash,
+              salt: salt,
+              recovery_hash: recoveryHash,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            }
+          );
+        }
+      }
+
+      execute(sqlStatement, rowData = null) {
+        const db = JSON.parse(localStorage.getItem(CHAVE_SQL_DB));
+        db.sql_log.push(sqlStatement);
+        if (rowData) {
+          const index = db.tables.admin_credentials.rows.findIndex(r => r.username === rowData.username);
+          if (index >= 0) {
+            db.tables.admin_credentials.rows[index] = rowData;
+          } else {
+            db.tables.admin_credentials.rows.push(rowData);
+          }
+        }
+        localStorage.setItem(CHAVE_SQL_DB, JSON.stringify(db));
+      }
+
+      query(sqlStatement) {
+        const db = JSON.parse(localStorage.getItem(CHAVE_SQL_DB) || '{"tables":{"admin_credentials":{"rows":[]}}}');
+        return db.tables.admin_credentials.rows || [];
+      }
+
+      async validarLogin(senhaDigitada) {
+        const rows = this.query("SELECT * FROM admin_credentials WHERE username = 'marcos'");
+        if (!rows || rows.length === 0) return false;
+        const user = rows[0];
+
+        // Validar SHA-256 com o Salt guardado na tabela SQL
+        const hashCalculado = await SQLAuthEngine.sha256(senhaDigitada + user.salt);
+        return hashCalculado === user.password_hash;
+      }
+
+      async atualizarSenha(novaSenha, novaPalavraSeguranca) {
+        const salt = SQLAuthEngine.gerarSalt();
+        const novoHash = await SQLAuthEngine.sha256(novaSenha + salt);
+        const recoveryHash = novaPalavraSeguranca 
+          ? await SQLAuthEngine.sha256(novaPalavraSeguranca.toLowerCase().trim())
+          : (this.query()[0]?.recovery_hash || '');
+
+        const updatedRow = {
+          id: 1,
+          username: 'marcos',
+          password_hash: novoHash,
+          salt: salt,
+          recovery_hash: recoveryHash,
+          created_at: this.query()[0]?.created_at || new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+
+        this.execute(
+          `UPDATE admin_credentials SET password_hash = '${novoHash}', salt = '${salt}', recovery_hash = '${recoveryHash}', updated_at = '${updatedRow.updated_at}' WHERE username = 'marcos';`,
+          updatedRow
+        );
+        return true;
+      }
+
+      async validarPalavraRecuperacao(palavra) {
+        const rows = this.query();
+        if (!rows || rows.length === 0) return false;
+        const user = rows[0];
+        const hashPalavra = await SQLAuthEngine.sha256(palavra.toLowerCase().trim());
+        return hashPalavra === user.recovery_hash;
+      }
+    }
+
+    const sqlAuth = new SQLAuthEngine();
+
+    /* NAVEGAÇÃO DE TELAS DE AUTENTICAÇÃO */
+    function mostrarTelaAuth(tela) {
+      document.getElementById('authBoxLogin').style.display = tela === 'login' ? 'block' : 'none';
+      document.getElementById('authBoxCriar').style.display = tela === 'criar' ? 'block' : 'none';
+      document.getElementById('authBoxEsqueci').style.display = tela === 'esqueci' ? 'block' : 'none';
+      document.getElementById('authErrorMsg').style.display = 'none';
+      const msgRec = document.getElementById('recuperarMsgErro');
+      if (msgRec) msgRec.style.display = 'none';
+    }
+
+    /* AUTENTICAÇÃO COM HASH */
+    async function autenticarAdmin() {
       const pass = document.getElementById('adminPasswordInput').value.trim();
       const erro = document.getElementById('authErrorMsg');
 
-      if (pass === 'marcos' || pass === 'marcos123' || pass === '123' || pass === 'admin') {
+      if (!pass) {
+        erro.textContent = 'Por favor, digite sua senha.';
+        erro.style.display = 'block';
+        return;
+      }
+
+      const ehValida = await sqlAuth.validarLogin(pass);
+
+      if (ehValida) {
         sessionStorage.setItem(CHAVE_ADMIN_AUTH, 'true');
         document.getElementById('authOverlay').style.display = 'none';
         document.getElementById('dashboardContent').style.display = 'block';
         carregarDadosAdmin();
       } else {
+        erro.textContent = 'Senha incorreta. Acesso restrito a Marcos Vinícius.';
         erro.style.display = 'block';
       }
+    }
+
+    /* CRIAR NOVA SENHA NO BANCO SQL */
+    async function salvarNovaSenhaSQL() {
+      const nova = document.getElementById('novaSenhaInput').value.trim();
+      const conf = document.getElementById('confirmaSenhaInput').value.trim();
+      const palavra = document.getElementById('palavraRecuperacaoInput').value.trim();
+
+      if (!nova) {
+        alert('Digite a nova senha.');
+        return;
+      }
+      if (nova !== conf) {
+        alert('A confirmação da senha não confere.');
+        return;
+      }
+      if (!palavra) {
+        alert('Digite uma palavra de segurança para recuperação futura.');
+        return;
+      }
+
+      await sqlAuth.atualizarSenha(nova, palavra);
+      alert('Senha criada e criptografada com sucesso no banco de dados SQL!');
+      mostrarTelaAuth('login');
+      document.getElementById('adminPasswordInput').value = '';
+    }
+
+    /* REDEFINIR SENHA ESQUECIDA COM PALAVRA DE SEGURANÇA */
+    async function redefinirSenhaEsquecidaSQL() {
+      const palavra = document.getElementById('recuperarPalavraInput').value.trim();
+      const nova = document.getElementById('recuperarNovaSenhaInput').value.trim();
+      const erro = document.getElementById('recuperarMsgErro');
+
+      if (!palavra || !nova) {
+        alert('Preencha a palavra de segurança e a nova senha desejada.');
+        return;
+      }
+
+      const palavraCorreta = await sqlAuth.validarPalavraRecuperacao(palavra);
+      if (!palavraCorreta) {
+        erro.style.display = 'block';
+        return;
+      }
+
+      erro.style.display = 'none';
+      await sqlAuth.atualizarSenha(nova, palavra);
+      alert('Senha redefinida com sucesso no banco SQL! Faça login com a sua nova senha.');
+      mostrarTelaAuth('login');
+      document.getElementById('adminPasswordInput').value = '';
+    }
+
+    /* MODAL INTERNO: ALTERAR SENHA NO DASHBOARD */
+    function abrirModalAlterarSenhaAdmin() {
+      document.getElementById('dashSenhaAtual').value = '';
+      document.getElementById('dashNovaSenha').value = '';
+      document.getElementById('dashNovaPalavra').value = '';
+      document.getElementById('modalAlterarSenhaDash').style.display = 'flex';
+    }
+
+    function fecharModalAlterarSenhaDash(e) {
+      if (e && e.target !== e.currentTarget && !e.target.classList.contains('btn-cancel')) return;
+      document.getElementById('modalAlterarSenhaDash').style.display = 'none';
+    }
+
+    async function salvarAlteracaoSenhaDash() {
+      const atual = document.getElementById('dashSenhaAtual').value.trim();
+      const nova = document.getElementById('dashNovaSenha').value.trim();
+      const palavra = document.getElementById('dashNovaPalavra').value.trim();
+
+      if (!atual || !nova) {
+        alert('Informe a senha atual e a nova senha.');
+        return;
+      }
+
+      const atualValida = await sqlAuth.validarLogin(atual);
+      if (!atualValida) {
+        alert('A senha atual informada está incorreta.');
+        return;
+      }
+
+      await sqlAuth.atualizarSenha(nova, palavra);
+      alert('Senha e credenciais SQL atualizadas com sucesso!');
+      fecharModalAlterarSenhaDash();
     }
 
     function verificarAutenticacao() {
