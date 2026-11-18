@@ -990,7 +990,7 @@
     }
 
     .btn-add-especializacao {
-      display: inline-flex;
+      display: none;
       align-items: center;
       gap: 8px;
       padding: 10px 20px;
@@ -1004,15 +1004,17 @@
       transition: all 0.25s;
     }
 
-    .btn-add-especializacao:hover {
-      background: var(--cobalt-pure);
-      color: #ffffff;
-      border-color: var(--cobalt-pure);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0, 71, 255, 0.35);
+    /* Exibição apenas no modo de edição do Marcos */
+    body.is-admin .btn-add-especializacao {
+      display: inline-flex !important;
+    }
+
+    body.is-admin .btn-delete-card {
+      display: inline-flex !important;
     }
 
     .btn-delete-card {
+      display: none;
       background: none;
       border: none;
       color: #ef4444;
@@ -1020,15 +1022,42 @@
       cursor: pointer;
       padding: 4px 8px;
       border-radius: 6px;
-      display: inline-flex;
       align-items: center;
       gap: 4px;
       margin-left: auto;
       transition: background 0.2s;
     }
 
-    .btn-delete-card:hover {
-      background: rgba(239, 68, 68, 0.15);
+    /* Badge flutuante discreto no rodapé para alternar modo de edição */
+    .admin-dock-pill {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      z-index: 999;
+      background: rgba(8, 12, 24, 0.8);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      padding: 6px 14px;
+      font-size: 0.72rem;
+      color: #64748b;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .admin-dock-pill:hover {
+      color: #82aaff;
+      border-color: rgba(0, 71, 255, 0.4);
+      background: rgba(10, 15, 30, 0.95);
+    }
+
+    .admin-dock-pill.active {
+      color: #10b981;
+      border-color: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
     }
 
     /* Botão Inteligente de IA para Descrições */
@@ -1650,6 +1679,12 @@
     </div>
   </footer>
 
+  <!-- DOCK DE CONTROLE RESTRITO DO MARCOS (PARA ATIVAR/DESATIVAR MODO DE EDIÇÃO) -->
+  <div class="admin-dock-pill" id="adminDockPill" onclick="alternarModoEdicaoMarcos()" title="Modo exclusivo do Marcos para gerenciar competências e especializações">
+    <i class="fa-solid fa-lock" id="adminDockIcon"></i>
+    <span id="adminDockText">Área do Marcos</span>
+  </div>
+
   <!-- MODAL PARA ADICIONAR NOVA COMPETÊNCIA / ESPECIALIDADE -->
   <div class="modal-form-overlay" id="modalCompetencia" onclick="fecharModalNovaCompetencia(event)">
     <div class="modal-form-card" onclick="event.stopPropagation()">
@@ -1917,13 +1952,55 @@
       salvarFotoPerfil(dataUrl);
     }
 
+    // Controle Exclusivo do Marcos (Modo Administrador)
+    const CHAVE_ADMIN_MODE = 'marcos_modo_edicao_ativo';
+
+    function verificarModoEdicaoMarcos() {
+      const ativo = localStorage.getItem(CHAVE_ADMIN_MODE) === 'true';
+      const pill = document.getElementById('adminDockPill');
+      const icon = document.getElementById('adminDockIcon');
+      const text = document.getElementById('adminDockText');
+
+      if (ativo) {
+        document.body.classList.add('is-admin');
+        if (pill) pill.classList.add('active');
+        if (icon) icon.className = 'fa-solid fa-lock-open';
+        if (text) text.textContent = 'Modo Edição Ativo (Marcos)';
+      } else {
+        document.body.classList.remove('is-admin');
+        if (pill) pill.classList.remove('active');
+        if (icon) icon.className = 'fa-solid fa-lock';
+        if (text) text.textContent = 'Área do Marcos';
+      }
+    }
+
+    function alternarModoEdicaoMarcos() {
+      const estaAtivo = localStorage.getItem(CHAVE_ADMIN_MODE) === 'true';
+      if (estaAtivo) {
+        localStorage.removeItem(CHAVE_ADMIN_MODE);
+        verificarModoEdicaoMarcos();
+        alert('Modo de edição desativado. Visitantes verão seu portfólio limpo e sem botões de alterar.');
+      } else {
+        const senha = prompt('Área Exclusiva de Marcos Vinícius.\nDigite sua senha de acesso para habilitar os botões de adicionar e alterar:');
+        if (senha === 'marcos' || senha === '123' || senha === 'marcos123' || senha === 'admin') {
+          localStorage.setItem(CHAVE_ADMIN_MODE, 'true');
+          verificarModoEdicaoMarcos();
+          alert('Acesso liberado com sucesso, Marcos! Os botões de adicionar e alterar especializações/competências já estão visíveis para você.');
+        } else if (senha !== null) {
+          alert('Senha incorreta. Apenas Marcos Vinícius possui permissão para editar.');
+        }
+      }
+    }
+
     // Inicializar na carga
     document.addEventListener('DOMContentLoaded', () => {
+      verificarModoEdicaoMarcos();
       carregarFotoPerfil();
       renderizarEspecializacoes();
       renderizarCompetencias();
       carregarProjetosDoGitHub();
     });
+    verificarModoEdicaoMarcos();
     carregarFotoPerfil();
     renderizarEspecializacoes();
     renderizarCompetencias();
