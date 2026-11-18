@@ -337,17 +337,16 @@
       height: 520px;
     }
 
-    /* ANEL LUMINOSO BRANCO PURO (EXATAMENTE COMO NA FOTO DO LOUVRE) */
+    /* O ANEL LUMINOSO BRANCO PURO (SEM SUB-BORDAS NEM INSET SHADOW) */
     .white-halo-ring {
       position: absolute;
       width: 360px;
       height: 360px;
       border-radius: 50%;
-      border: 6px solid #FFFFFF;
+      border: 5px solid #FFFFFF;
       box-shadow: 
-        0 0 35px rgba(255, 255, 255, 0.9),
-        0 0 80px rgba(0, 71, 255, 0.7),
-        inset 0 0 30px rgba(255, 255, 255, 0.5);
+        0 0 35px rgba(255, 255, 255, 0.95),
+        0 0 75px rgba(0, 71, 255, 0.65);
       z-index: 3;
       pointer-events: none;
       animation: pulseHalo 4s ease-in-out infinite alternate;
@@ -355,16 +354,16 @@
 
     @keyframes pulseHalo {
       0% {
-        box-shadow: 0 0 35px rgba(255, 255, 255, 0.9), 0 0 70px rgba(0, 71, 255, 0.6);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.9), 0 0 65px rgba(0, 71, 255, 0.6);
         transform: scale(1);
       }
       100% {
-        box-shadow: 0 0 50px rgba(255, 255, 255, 1), 0 0 110px rgba(0, 71, 255, 0.85);
+        box-shadow: 0 0 45px rgba(255, 255, 255, 1), 0 0 95px rgba(0, 71, 255, 0.8);
         transform: scale(1.02);
       }
     }
 
-    /* A FOTO PERFEITAMENTE REDONDA - SEM NENHUMA PARTE TRANSPARENTE SOBRANDO */
+    /* A BOLA REDONDA PERFEITA - 100% CIRCULAR, ZERO SUB-BORDAS, ZERO ARCOS */
     .sculpture-figure {
       position: relative;
       z-index: 2;
@@ -373,10 +372,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle at center, rgba(14, 23, 42, 0.95) 0%, rgba(5, 8, 17, 1) 100%);
-      border-radius: 50%;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
-      border: none;
+      background: radial-gradient(circle at center, #0e172a 0%, #050811 100%);
+      border-radius: 50% !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.95);
       overflow: hidden;
       cursor: pointer;
     }
@@ -386,7 +386,7 @@
       height: 100%;
       object-fit: cover;
       object-position: center top;
-      border-radius: 50%;
+      border-radius: 50% !important;
       filter: grayscale(100%) contrast(1.2) brightness(0.95);
       display: none;
       transition: filter 0.3s;
@@ -989,6 +989,126 @@
       margin-bottom: 12px;
     }
 
+    .btn-add-especializacao {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      background: rgba(0, 71, 255, 0.12);
+      border: 1px solid rgba(0, 71, 255, 0.4);
+      color: #82aaff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .btn-add-especializacao:hover {
+      background: var(--cobalt-pure);
+      color: #ffffff;
+      border-color: var(--cobalt-pure);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 71, 255, 0.35);
+    }
+
+    .btn-delete-card {
+      background: none;
+      border: none;
+      color: #ef4444;
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: auto;
+      transition: background 0.2s;
+    }
+
+    .btn-delete-card:hover {
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    /* Modal de Nova Especialização / Curso */
+    .modal-form-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 2200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-form-card {
+      background: #0a0f1d;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 480px;
+      padding: 28px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.85);
+      animation: sheetPop 0.25s ease-out;
+    }
+
+    .modal-form-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #FFF;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-input-group {
+      margin-bottom: 16px;
+    }
+
+    .form-input-group label {
+      display: block;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .form-input-group input, .form-input-group textarea, .form-input-group select {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-input-group input:focus, .form-input-group textarea:focus, .form-input-group select:focus {
+      border-color: var(--cobalt-pure);
+      box-shadow: 0 0 12px rgba(0, 71, 255, 0.3);
+    }
+
+    .modal-form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
     /* ==========================================================================
        FOOTER / CONTATO MONUMENTAL
        ========================================================================== */
@@ -1396,10 +1516,10 @@
     </div>
   </section>
 
-  <!-- FORMAÇÃO & CERTIFICAÇÕES -->
+  <!-- FORMAÇÃO & ESPECIALIZAÇÕES -->
   <section class="edu-section" id="formacao">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; margin-bottom: 40px;">
         <div>
           <div class="section-eyebrow">
             <i class="fa-solid fa-graduation-cap"></i>
@@ -1407,22 +1527,15 @@
           </div>
           <h2 class="section-title">Formação & <strong>Capacitação</strong></h2>
         </div>
+        <button class="btn-add-especializacao" onclick="abrirModalNovaEspecializacao()">
+          <i class="fa-solid fa-plus"></i>
+          <span>Adicionar Especialização</span>
+        </button>
       </div>
 
-      <div class="edu-list-grid">
-        <div class="edu-card-item">
-          <span class="edu-badge-type">Curso Profissionalizante</span>
-          <h4 class="edu-title">Análise e Desenvolvimento de Sistemas</h4>
-          <div class="edu-institution">Ensino Superior em Andamento</div>
-          <p style="font-size: 0.88rem; color: var(--text-muted);">Formação com base sólida em engenharia de software, modelagem de dados, programação orientada a objetos e governança de TI.</p>
-        </div>
-
-        <div class="edu-card-item">
-          <span class="edu-badge-type">Especialização Técnica</span>
-          <h4 class="edu-title">Desenvolvimento Full Stack & Mobile</h4>
-          <div class="edu-institution">Projetos Práticos & Extensão</div>
-          <p style="font-size: 0.88rem; color: var(--text-muted);">Construção prática de sistemas de ponto de venda, aplicativos nativos Android, e-commerce e soluções orientadas a mercado.</p>
-        </div>
+      <!-- Grid dinâmico de especializações -->
+      <div class="edu-list-grid" id="especializacoesGrid">
+        <!-- Renderizado dinamicamente via JavaScript / persistido no LocalStorage -->
       </div>
     </div>
   </section>
@@ -1460,6 +1573,48 @@
       </div>
     </div>
   </footer>
+
+  <!-- MODAL PARA ADICIONAR NOVA ESPECIALIZAÇÃO -->
+  <div class="modal-form-overlay" id="modalEspecializacao" onclick="fecharModalNovaEspecializacao(event)">
+    <div class="modal-form-card" onclick="event.stopPropagation()">
+      <h3><i class="fa-solid fa-graduation-cap" style="color: #82aaff;"></i> Nova Especialização</h3>
+      
+      <div class="form-input-group">
+        <label>Tipo / Categoria:</label>
+        <select id="novoTipoEspecializacao">
+          <option value="Especialização Técnica">Especialização Técnica</option>
+          <option value="Curso Profissionalizante">Curso Profissionalizante</option>
+          <option value="Graduação / Superior">Graduação / Superior</option>
+          <option value="Certificação Profissional">Certificação Profissional</option>
+          <option value="Capacitação Prática">Capacitação Prática</option>
+        </select>
+      </div>
+
+      <div class="form-input-group">
+        <label>Nome do Curso / Especialização:</label>
+        <input type="text" id="novoTituloEspecializacao" placeholder="Ex: Engenharia de Software / IA Aplicada">
+      </div>
+
+      <div class="form-input-group">
+        <label>Instituição ou Status:</label>
+        <input type="text" id="novaInstituicaoEspecializacao" placeholder="Ex: Projetos Práticos & Extensão / Concluído">
+      </div>
+
+      <div class="form-input-group">
+        <label>Descrição / Conteúdo Abordado:</label>
+        <textarea id="novaDescricaoEspecializacao" placeholder="Breve resumo do que foi aprendido ou praticado..."></textarea>
+      </div>
+
+      <div class="modal-form-actions">
+        <button class="btn-ghost-editorial" onclick="fecharModalNovaEspecializacao()" style="padding: 8px 18px;">
+          Cancelar
+        </button>
+        <button class="btn-primary-sculpture" onclick="salvarNovaEspecializacao()" style="padding: 8px 22px;">
+          <i class="fa-solid fa-plus"></i> Adicionar
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL / MENU DE ESCOLHA DE FOTO (ESTILO INSTAGRAM / WHATSAPP) -->
   <div class="avatar-sheet-overlay" id="avatarMenuModal" onclick="fecharMenuFoto(event)">
@@ -1624,8 +1779,123 @@
     }
 
     // Inicializar na carga
-    document.addEventListener('DOMContentLoaded', carregarFotoPerfil);
+    document.addEventListener('DOMContentLoaded', () => {
+      carregarFotoPerfil();
+      renderizarEspecializacoes();
+    });
     carregarFotoPerfil();
+    renderizarEspecializacoes();
+
+    /* ==========================================================================
+       GERENCIAMENTO DINÂMICO DE ESPECIALIZAÇÕES & CURSOS
+       ========================================================================== */
+    const CHAVE_EDU_STORAGE = 'marcos_especializacoes_v1';
+    const ESPECIALIZACOES_PADRAO = [
+      {
+        id: 1,
+        tipo: "Curso Profissionalizante",
+        titulo: "Análise e Desenvolvimento de Sistemas",
+        instituicao: "Ensino Superior em Andamento",
+        descricao: "Formação com base sólida em engenharia de software, modelagem de dados, programação orientada a objetos e governança de TI."
+      },
+      {
+        id: 2,
+        tipo: "Especialização Técnica",
+        titulo: "Desenvolvimento Full Stack & Mobile",
+        instituicao: "Projetos Práticos & Extensão",
+        descricao: "Construção prática de sistemas de ponto de venda, aplicativos nativos Android, e-commerce e soluções orientadas a mercado."
+      }
+    ];
+
+    function obterEspecializacoes() {
+      const salvas = localStorage.getItem(CHAVE_EDU_STORAGE);
+      if (salvas) {
+        try {
+          return JSON.parse(salvas);
+        } catch (e) {
+          return ESPECIALIZACOES_PADRAO;
+        }
+      }
+      return ESPECIALIZACOES_PADRAO;
+    }
+
+    function salvarEspecializacoesStorage(lista) {
+      try {
+        localStorage.setItem(CHAVE_EDU_STORAGE, JSON.stringify(lista));
+      } catch (e) {
+        console.warn('Erro ao salvar no storage:', e);
+      }
+    }
+
+    let especializacoesAtuais = obterEspecializacoes();
+
+    function renderizarEspecializacoes() {
+      const grid = document.getElementById('especializacoesGrid');
+      if (!grid) return;
+
+      grid.innerHTML = '';
+      especializacoesAtuais.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'edu-card-item';
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <span class="edu-badge-type">${item.tipo}</span>
+            <button class="btn-delete-card" onclick="removerEspecializacao(${item.id})" title="Remover este item">
+              <i class="fa-solid fa-trash-can"></i> Excluir
+            </button>
+          </div>
+          <h4 class="edu-title">${item.titulo}</h4>
+          <div class="edu-institution">${item.instituicao}</div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">${item.descricao}</p>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function abrirModalNovaEspecializacao() {
+      document.getElementById('novoTituloEspecializacao').value = '';
+      document.getElementById('novaInstituicaoEspecializacao').value = '';
+      document.getElementById('novaDescricaoEspecializacao').value = '';
+      document.getElementById('modalEspecializacao').style.display = 'flex';
+    }
+
+    function fecharModalNovaEspecializacao(e) {
+      if (e && e.target !== e.currentTarget && !e.target.classList.contains('btn-ghost-editorial')) return;
+      document.getElementById('modalEspecializacao').style.display = 'none';
+    }
+
+    function salvarNovaEspecializacao() {
+      const titulo = document.getElementById('novoTituloEspecializacao').value.trim();
+      const instituicao = document.getElementById('novaInstituicaoEspecializacao').value.trim();
+      const descricao = document.getElementById('novaDescricaoEspecializacao').value.trim();
+      const tipo = document.getElementById('novoTipoEspecializacao').value;
+
+      if (!titulo) {
+        alert('Por favor, informe o título da especialização ou curso.');
+        return;
+      }
+
+      const novoItem = {
+        id: Date.now(),
+        tipo: tipo,
+        titulo: titulo,
+        instituicao: instituicao || 'Certificação & Especialização',
+        descricao: descricao || 'Aprofundamento técnico e prático de competências.'
+      };
+
+      especializacoesAtuais.push(novoItem);
+      salvarEspecializacoesStorage(especializacoesAtuais);
+      renderizarEspecializacoes();
+      fecharModalNovaEspecializacao();
+    }
+
+    function removerEspecializacao(id) {
+      if (confirm('Deseja excluir esta especialização da sua lista?')) {
+        especializacoesAtuais = especializacoesAtuais.filter(item => item.id !== id);
+        salvarEspecializacoesStorage(especializacoesAtuais);
+        renderizarEspecializacoes();
+      }
+    }
   </script>
 
 </body>
