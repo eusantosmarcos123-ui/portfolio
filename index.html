@@ -1633,7 +1633,7 @@
       
       <div class="form-input-group">
         <label>Ícone Representativo:</label>
-        <select id="novoIconeCompetencia">
+        <select id="novoIconeCompetencia" onchange="alternarCampoIconeOutro(this.value)">
           <option value="fa-solid fa-laptop-code">💻 Laptop / Código</option>
           <option value="fa-solid fa-server">🖥️ Servidor / Backend</option>
           <option value="fa-solid fa-database">🗄️ Banco de Dados</option>
@@ -1642,7 +1642,17 @@
           <option value="fa-solid fa-cloud">☁️ Nuvem & DevOps</option>
           <option value="fa-solid fa-brain">🧠 Inteligência Artificial</option>
           <option value="fa-solid fa-gear">⚙️ Ferramentas & Engenharia</option>
+          <option value="outro">✨ Outro (Digitar ou Personalizar)</option>
         </select>
+      </div>
+
+      <!-- Campo visível quando escolher "Outro" -->
+      <div class="form-input-group" id="grupoIconeOutro" style="display: none;">
+        <label>Ícone ou Símbolo Personalizado:</label>
+        <input type="text" id="novoIconePersonalizado" placeholder="Ex: fa-solid fa-briefcase, fa-solid fa-chart-line ou deixe em branco">
+        <span style="font-size: 0.72rem; color: #82aaff; margin-top: 4px; display: block;">
+          Você pode colocar o nome de um ícone FontAwesome ou digitar palavras-chave (Gestão, Negócios, Design, etc.).
+        </span>
       </div>
 
       <div class="form-input-group">
@@ -2074,10 +2084,21 @@
       });
     }
 
+    function alternarCampoIconeOutro(valor) {
+      const grupo = document.getElementById('grupoIconeOutro');
+      if (grupo) {
+        grupo.style.display = valor === 'outro' ? 'block' : 'none';
+      }
+    }
+
     function abrirModalNovaCompetencia() {
       document.getElementById('novoTituloCompetencia').value = '';
       document.getElementById('novaDescricaoCompetencia').value = '';
       document.getElementById('novasTagsCompetencia').value = '';
+      document.getElementById('novoIconeCompetencia').value = 'fa-solid fa-laptop-code';
+      const inputPersonalizado = document.getElementById('novoIconePersonalizado');
+      if (inputPersonalizado) inputPersonalizado.value = '';
+      alternarCampoIconeOutro('fa-solid fa-laptop-code');
       document.getElementById('modalCompetencia').style.display = 'flex';
     }
 
@@ -2090,18 +2111,24 @@
       const titulo = document.getElementById('novoTituloCompetencia').value.trim();
       const descricao = document.getElementById('novaDescricaoCompetencia').value.trim();
       const tagsRaw = document.getElementById('novasTagsCompetencia').value.trim();
-      const icone = document.getElementById('novoIconeCompetencia').value;
+      const iconeSelect = document.getElementById('novoIconeCompetencia').value;
+      const iconePersonalizado = document.getElementById('novoIconePersonalizado') ? document.getElementById('novoIconePersonalizado').value.trim() : '';
 
       if (!titulo) {
         alert('Por favor, informe o título da competência.');
         return;
       }
 
+      let iconeFinal = iconeSelect;
+      if (iconeSelect === 'outro') {
+        iconeFinal = iconePersonalizado.startsWith('fa-') ? iconePersonalizado : 'fa-solid fa-sparkles';
+      }
+
       const tags = tagsRaw ? tagsRaw.split(',').filter(t => t.trim().length > 0) : ['Especialidade Prática'];
 
       const novoItem = {
         id: Date.now(),
-        icone: icone,
+        icone: iconeFinal,
         titulo: titulo,
         descricao: descricao || 'Domínio técnico e aplicação prática em projetos reais.',
         tags: tags
