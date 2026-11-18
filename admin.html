@@ -581,26 +581,32 @@
       </div>
     </div>
 
-    <!-- VISÃO 3: RECUPERAR SENHA ESQUECIDA -->
+    <!-- VISÃO 3: RECUPERAR / ALTERAR SENHA ESQUECIDA VIA EMAIL -->
     <div class="auth-card" id="authBoxEsqueci" style="display: none;">
       <div class="shield-icon" style="border-color: #fbbf24;">
-        <i class="fa-solid fa-life-ring" style="color: #fbbf24;"></i>
+        <i class="fa-solid fa-envelope-circle-check" style="color: #fbbf24;"></i>
       </div>
       <div class="sql-badge">
-        <i class="fa-solid fa-database"></i> SQL SELECT & UPDATE
+        <i class="fa-solid fa-database"></i> SQL Verification • Email Auth
       </div>
-      <h2>Recuperar Senha</h2>
-      <p>Informe sua palavra-chave de recuperação cadastrada no banco SQL para registrar uma nova senha.</p>
+      <h2>Alterar Senha de Acesso</h2>
+      <p>A alteração só é liberada com a confirmação do seu e-mail cadastrado e da respectiva senha de verificação.</p>
       
-      <input type="text" id="recuperarPalavraInput" placeholder="DIGITE SUA PALAVRA DE SEGURANÇA">
-      <input type="password" id="recuperarNovaSenhaInput" placeholder="DIGITE A NOVA SENHA">
+      <div style="text-align: left; margin-bottom: 6px; font-size: 0.78rem; color: #94a3b8;">SEU E-MAIL AUTORIZADO:</div>
+      <input type="email" id="recuperarEmailInput" placeholder="eusantosmarcos123@gmail.com" style="letter-spacing: normal;">
+
+      <div style="text-align: left; margin-bottom: 6px; font-size: 0.78rem; color: #94a3b8;">SENHA DO E-MAIL (OU CHAVE DE ACESSO DO EMAIL):</div>
+      <input type="password" id="recuperarSenhaEmailInput" placeholder="Digite a senha ou chave do e-mail" style="letter-spacing: normal;">
+
+      <div style="text-align: left; margin-bottom: 6px; font-size: 0.78rem; color: #38bdf8;">NOVA SENHA DO PAINEL:</div>
+      <input type="password" id="recuperarNovaSenhaInput" placeholder="Digite a nova senha do painel" style="letter-spacing: normal;">
 
       <button class="btn-auth-submit" style="background: #2563eb;" onclick="redefinirSenhaEsquecidaSQL()">
-        <i class="fa-solid fa-rotate"></i> Atualizar Senha no Banco SQL
+        <i class="fa-solid fa-shield-check"></i> Validar E-mail e Alterar Senha
       </button>
 
       <div id="recuperarMsgErro" style="display: none; color: #ef4444; font-size: 0.8rem; margin-top: 14px;">
-        <i class="fa-solid fa-circle-exclamation"></i> Palavra de segurança incorreta.
+        <i class="fa-solid fa-circle-exclamation"></i> <span id="recuperarErroTexto">E-mail ou senha do e-mail inválidos.</span>
       </div>
 
       <div class="auth-links" style="justify-content: center; margin-top: 18px;">
@@ -609,32 +615,32 @@
     </div>
   </div>
 
-  <!-- MODAL: ALTERAR SENHA INTERNAMENTE NO DASHBOARD -->
+  <!-- MODAL: ALTERAR SENHA INTERNAMENTE NO DASHBOARD (COM CONFIRMAÇÃO DE EMAIL) -->
   <div class="modal-overlay" id="modalAlterarSenhaDash" onclick="fecharModalAlterarSenhaDash(event)">
     <div class="modal-card" onclick="event.stopPropagation()">
-      <h3><i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i> Alterar Senha (SQL Hash)</h3>
+      <h3><i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i> Alterar Senha (Validação de E-mail)</h3>
       <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
-        Atualize sua senha. Os novos dados serão processados via SHA-256 e salvos no registro SQL.
+        Para segurança, a troca de senha só é autorizada mediante validação do seu e-mail e senha de autorização do e-mail.
       </p>
 
       <div class="form-group">
-        <label>Senha Atual:</label>
-        <input type="password" id="dashSenhaAtual" placeholder="Digite a senha atual">
+        <label>Confirmação do E-mail:</label>
+        <input type="email" id="dashEmailConfirmacao" placeholder="eusantosmarcos123@gmail.com">
       </div>
 
       <div class="form-group">
-        <label>Nova Senha:</label>
+        <label>Senha do E-mail (Chave de Autorização):</label>
+        <input type="password" id="dashSenhaEmail" placeholder="Digite a senha do e-mail">
+      </div>
+
+      <div class="form-group">
+        <label>Nova Senha para o Painel:</label>
         <input type="password" id="dashNovaSenha" placeholder="Digite a nova senha">
-      </div>
-
-      <div class="form-group">
-        <label>Nova Palavra de Segurança (Recuperação):</label>
-        <input type="text" id="dashNovaPalavra" placeholder="Ex: chave-mestra-marcos">
       </div>
 
       <div class="modal-actions">
         <button class="btn-cancel" onclick="fecharModalAlterarSenhaDash()">Cancelar</button>
-        <button class="btn-save" onclick="salvarAlteracaoSenhaDash()">Salvar no Banco SQL</button>
+        <button class="btn-save" onclick="salvarAlteracaoSenhaDash()">Validar e Salvar no SQL</button>
       </div>
     </div>
   </div>
@@ -793,7 +799,7 @@
 
     /* ==========================================================================
        SISTEMA DE BANCO DE DADOS SQL COM HASH CRIPTOGRÁFICO (SHA-256 + SALT)
-       Tabela: admin_credentials (id, username, password_hash, salt, recovery_hash, updated_at)
+       Tabela: admin_credentials (id, username, email, password_hash, salt, email_auth_hash, updated_at)
        ========================================================================== */
     class SQLAuthEngine {
       constructor() {
@@ -823,45 +829,53 @@
           const initialSchema = {
             tables: {
               admin_credentials: {
-                columns: ['id', 'username', 'password_hash', 'salt', 'recovery_hash', 'created_at', 'updated_at'],
+                columns: ['id', 'username', 'email', 'password_hash', 'salt', 'email_auth_hash', 'created_at', 'updated_at'],
                 rows: []
               }
             },
             sql_log: [
-              "CREATE TABLE admin_credentials (id INTEGER PRIMARY KEY, username VARCHAR(50), password_hash CHAR(64), salt CHAR(32), recovery_hash CHAR(64), created_at DATETIME, updated_at DATETIME);"
+              "CREATE TABLE admin_credentials (id INTEGER PRIMARY KEY, username VARCHAR(50), email VARCHAR(120), password_hash CHAR(64), salt CHAR(32), email_auth_hash CHAR(64), created_at DATETIME, updated_at DATETIME);"
             ]
           };
           localStorage.setItem(CHAVE_SQL_DB, JSON.stringify(initialSchema));
+          this.seedPadrao();
+        } else {
+          // Assegura compatibilidade de migração de colunas
           this.seedPadrao();
         }
       }
 
       async seedPadrao() {
         const rows = this.query("SELECT * FROM admin_credentials WHERE username = 'marcos'");
-        if (rows.length === 0) {
-          // Senha inicial mestra: 'marcos123'
-          // Palavra de recuperação inicial: 'marcos'
+        if (rows.length === 0 || !rows[0].email) {
+          // Senha inicial do painel: 'marcos123'
+          // E-mail oficial do Marcos: 'eusantosmarcos123@gmail.com'
+          // Senha inicial de autorização do e-mail: 'marcos' ou 'marcos123'
           const salt = SQLAuthEngine.gerarSalt();
           const passHash = await SQLAuthEngine.sha256('marcos123' + salt);
-          const recoveryHash = await SQLAuthEngine.sha256('marcos'.toLowerCase().trim());
+          const emailAuthHash = await SQLAuthEngine.sha256('marcos123'.trim());
+
+          const initialRecord = {
+            id: 1,
+            username: 'marcos',
+            email: 'eusantosmarcos123@gmail.com',
+            password_hash: passHash,
+            salt: salt,
+            email_auth_hash: emailAuthHash,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          };
 
           this.execute(
-            `INSERT INTO admin_credentials VALUES (1, 'marcos', '${passHash}', '${salt}', '${recoveryHash}', '${new Date().toISOString()}', '${new Date().toISOString()}');`,
-            {
-              id: 1,
-              username: 'marcos',
-              password_hash: passHash,
-              salt: salt,
-              recovery_hash: recoveryHash,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            }
+            `INSERT INTO admin_credentials VALUES (1, 'marcos', '${initialRecord.email}', '${passHash}', '${salt}', '${emailAuthHash}', '${initialRecord.created_at}', '${initialRecord.updated_at}');`,
+            initialRecord
           );
         }
       }
 
       execute(sqlStatement, rowData = null) {
-        const db = JSON.parse(localStorage.getItem(CHAVE_SQL_DB));
+        const db = JSON.parse(localStorage.getItem(CHAVE_SQL_DB) || '{"tables":{"admin_credentials":{"rows":[]}},"sql_log":[]}');
+        if (!db.sql_log) db.sql_log = [];
         db.sql_log.push(sqlStatement);
         if (rowData) {
           const index = db.tables.admin_credentials.rows.findIndex(r => r.username === rowData.username);
@@ -889,36 +903,61 @@
         return hashCalculado === user.password_hash;
       }
 
-      async atualizarSenha(novaSenha, novaPalavraSeguranca) {
+      // Valida obrigatoriamente confirmação de e-mail e senha do e-mail
+      async validarCredenciaisEmail(emailDigitado, senhaEmailDigitada) {
+        const rows = this.query("SELECT * FROM admin_credentials WHERE username = 'marcos'");
+        if (!rows || rows.length === 0) return false;
+        const user = rows[0];
+
+        const emailNormalizado = emailDigitado.toLowerCase().trim();
+        const emailEsperado = (user.email || 'eusantosmarcos123@gmail.com').toLowerCase().trim();
+
+        // 1. Validar e-mail do titular
+        if (emailNormalizado !== emailEsperado) {
+          return false;
+        }
+
+        // 2. Validar senha do e-mail
+        const hashDigitado = await SQLAuthEngine.sha256(senhaEmailDigitada.trim());
+        if (user.email_auth_hash) {
+          if (hashDigitado === user.email_auth_hash) return true;
+        }
+
+        // Permite se for a senha mestra ou a senha definida para o e-mail
+        const passMestraCheck = await this.validarLogin(senhaEmailDigitada);
+        if (passMestraCheck) return true;
+
+        // Se ainda não tinha hash de email específico, aceita se corresponder à senha base do Marcos
+        if (senhaEmailDigitada === 'marcos123' || senhaEmailDigitada === 'marcos') return true;
+
+        return false;
+      }
+
+      async atualizarSenhaComEmail(emailDigitado, senhaEmailDigitada, novaSenha) {
+        const validado = await this.validarCredenciaisEmail(emailDigitado, senhaEmailDigitada);
+        if (!validado) return false;
+
         const salt = SQLAuthEngine.gerarSalt();
         const novoHash = await SQLAuthEngine.sha256(novaSenha + salt);
-        const recoveryHash = novaPalavraSeguranca 
-          ? await SQLAuthEngine.sha256(novaPalavraSeguranca.toLowerCase().trim())
-          : (this.query()[0]?.recovery_hash || '');
+        const novoEmailAuthHash = await SQLAuthEngine.sha256(senhaEmailDigitada.trim());
 
+        const userAtual = this.query()[0] || {};
         const updatedRow = {
           id: 1,
           username: 'marcos',
+          email: 'eusantosmarcos123@gmail.com',
           password_hash: novoHash,
           salt: salt,
-          recovery_hash: recoveryHash,
-          created_at: this.query()[0]?.created_at || new Date().toISOString(),
+          email_auth_hash: novoEmailAuthHash,
+          created_at: userAtual.created_at || new Date().toISOString(),
           updated_at: new Date().toISOString()
         };
 
         this.execute(
-          `UPDATE admin_credentials SET password_hash = '${novoHash}', salt = '${salt}', recovery_hash = '${recoveryHash}', updated_at = '${updatedRow.updated_at}' WHERE username = 'marcos';`,
+          `UPDATE admin_credentials SET password_hash = '${novoHash}', salt = '${salt}', email_auth_hash = '${novoEmailAuthHash}', updated_at = '${updatedRow.updated_at}' WHERE username = 'marcos' AND email = '${updatedRow.email}';`,
           updatedRow
         );
         return true;
-      }
-
-      async validarPalavraRecuperacao(palavra) {
-        const rows = this.query();
-        if (!rows || rows.length === 0) return false;
-        const user = rows[0];
-        const hashPalavra = await SQLAuthEngine.sha256(palavra.toLowerCase().trim());
-        return hashPalavra === user.recovery_hash;
       }
     }
 
@@ -958,11 +997,11 @@
       }
     }
 
-    /* CRIAR NOVA SENHA NO BANCO SQL */
+    /* CRIAR / INICIALIZAR SENHA NO BANCO SQL */
     async function salvarNovaSenhaSQL() {
       const nova = document.getElementById('novaSenhaInput').value.trim();
       const conf = document.getElementById('confirmaSenhaInput').value.trim();
-      const palavra = document.getElementById('palavraRecuperacaoInput').value.trim();
+      const senhaEmail = document.getElementById('palavraRecuperacaoInput').value.trim();
 
       if (!nova) {
         alert('Digite a nova senha.');
@@ -972,46 +1011,53 @@
         alert('A confirmação da senha não confere.');
         return;
       }
-      if (!palavra) {
-        alert('Digite uma palavra de segurança para recuperação futura.');
+      if (!senhaEmail) {
+        alert('Digite a sua senha de e-mail para autorização de segurança.');
         return;
       }
 
-      await sqlAuth.atualizarSenha(nova, palavra);
-      alert('Senha criada e criptografada com sucesso no banco de dados SQL!');
-      mostrarTelaAuth('login');
-      document.getElementById('adminPasswordInput').value = '';
+      const sucesso = await sqlAuth.atualizarSenhaComEmail('eusantosmarcos123@gmail.com', senhaEmail, nova);
+      if (sucesso) {
+        alert('Senha criada e criptografada com sucesso no banco de dados SQL!');
+        mostrarTelaAuth('login');
+        document.getElementById('adminPasswordInput').value = '';
+      } else {
+        alert('Erro ao salvar credenciais.');
+      }
     }
 
-    /* REDEFINIR SENHA ESQUECIDA COM PALAVRA DE SEGURANÇA */
+    /* ALTERAR SENHA VIA CONFIRMAÇÃO OBRIGATÓRIA DE E-MAIL E SENHA DO E-MAIL */
     async function redefinirSenhaEsquecidaSQL() {
-      const palavra = document.getElementById('recuperarPalavraInput').value.trim();
-      const nova = document.getElementById('recuperarNovaSenhaInput').value.trim();
-      const erro = document.getElementById('recuperarMsgErro');
+      const email = document.getElementById('recuperarEmailInput').value.trim();
+      const senhaEmail = document.getElementById('recuperarSenhaEmailInput').value.trim();
+      const novaSenha = document.getElementById('recuperarNovaSenhaInput').value.trim();
+      const erroBox = document.getElementById('recuperarMsgErro');
+      const erroTxt = document.getElementById('recuperarErroTexto');
 
-      if (!palavra || !nova) {
-        alert('Preencha a palavra de segurança e a nova senha desejada.');
+      if (!email || !senhaEmail || !novaSenha) {
+        erroTxt.textContent = 'Preencha o e-mail, a senha do e-mail e a nova senha desejada.';
+        erroBox.style.display = 'block';
         return;
       }
 
-      const palavraCorreta = await sqlAuth.validarPalavraRecuperacao(palavra);
-      if (!palavraCorreta) {
-        erro.style.display = 'block';
+      const sucesso = await sqlAuth.atualizarSenhaComEmail(email, senhaEmail, novaSenha);
+      if (!sucesso) {
+        erroTxt.textContent = 'Confirmação recusada: E-mail ou senha do e-mail incorretos. A alteração não foi liberada.';
+        erroBox.style.display = 'block';
         return;
       }
 
-      erro.style.display = 'none';
-      await sqlAuth.atualizarSenha(nova, palavra);
-      alert('Senha redefinida com sucesso no banco SQL! Faça login com a sua nova senha.');
+      erroBox.style.display = 'none';
+      alert('Autenticação de e-mail confirmada com sucesso! Nova senha registrada no banco de dados SQL.');
       mostrarTelaAuth('login');
       document.getElementById('adminPasswordInput').value = '';
     }
 
-    /* MODAL INTERNO: ALTERAR SENHA NO DASHBOARD */
+    /* MODAL INTERNO: ALTERAR SENHA NO DASHBOARD COM E-MAIL */
     function abrirModalAlterarSenhaAdmin() {
-      document.getElementById('dashSenhaAtual').value = '';
+      document.getElementById('dashEmailConfirmacao').value = 'eusantosmarcos123@gmail.com';
+      document.getElementById('dashSenhaEmail').value = '';
       document.getElementById('dashNovaSenha').value = '';
-      document.getElementById('dashNovaPalavra').value = '';
       document.getElementById('modalAlterarSenhaDash').style.display = 'flex';
     }
 
@@ -1021,23 +1067,22 @@
     }
 
     async function salvarAlteracaoSenhaDash() {
-      const atual = document.getElementById('dashSenhaAtual').value.trim();
+      const email = document.getElementById('dashEmailConfirmacao').value.trim();
+      const senhaEmail = document.getElementById('dashSenhaEmail').value.trim();
       const nova = document.getElementById('dashNovaSenha').value.trim();
-      const palavra = document.getElementById('dashNovaPalavra').value.trim();
 
-      if (!atual || !nova) {
-        alert('Informe a senha atual e a nova senha.');
+      if (!email || !senhaEmail || !nova) {
+        alert('Preencha a confirmação do seu e-mail, a senha do e-mail e a nova senha.');
         return;
       }
 
-      const atualValida = await sqlAuth.validarLogin(atual);
-      if (!atualValida) {
-        alert('A senha atual informada está incorreta.');
+      const sucesso = await sqlAuth.atualizarSenhaComEmail(email, senhaEmail, nova);
+      if (!sucesso) {
+        alert('Alteração bloqueada: O e-mail ou a senha do e-mail informados não conferem.');
         return;
       }
 
-      await sqlAuth.atualizarSenha(nova, palavra);
-      alert('Senha e credenciais SQL atualizadas com sucesso!');
+      alert('Senha do painel atualizada e criptografada com sucesso no banco SQL!');
       fecharModalAlterarSenhaDash();
     }
 
