@@ -795,7 +795,6 @@
               <tr>
                 <th>ID</th>
                 <th>Usuário</th>
-                <th>E-mail Autorizado</th>
                 <th>Hash da Senha (SHA-256)</th>
                 <th>Salt Criptográfico</th>
                 <th>Hash do E-mail</th>
@@ -1287,13 +1286,12 @@
       const rows = db.tables?.admin_credentials?.rows || [];
 
       if (rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #64748b; padding: 20px;">Nenhum registro encontrado na tabela admin_credentials.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #64748b; padding: 20px;">Nenhum registro encontrado na tabela admin_credentials.</td></tr>`;
       } else {
         tbody.innerHTML = rows.map(r => `
           <tr>
             <td><strong style="color: #38bdf8;">${r.id}</strong></td>
             <td><span style="color: #f1f5f9; font-weight: 600;">${r.username}</span></td>
-            <td><span style="color: #34d399;">${r.email || 'eusantosmarcos123@gmail.com'}</span></td>
             <td title="${r.password_hash}"><span class="hash-pill">${r.password_hash.substring(0, 16)}...</span></td>
             <td title="${r.salt}"><span style="color: #94a3b8; font-family: var(--font-mono);">${r.salt.substring(0, 10)}...</span></td>
             <td title="${r.email_auth_hash || ''}"><span class="hash-pill" style="border-color: rgba(52, 211, 153, 0.4); color: #34d399;">${(r.email_auth_hash || '').substring(0, 16)}...</span></td>
