@@ -631,7 +631,7 @@
         <i class="fa-solid fa-circle-exclamation"></i> Senha incorreta. Acesso restrito a Marcos Vinícius.
       </div>
 
-      <div class="auth-links" style="justify-content: center; margin-top: 16px;">
+      <div class="auth-links" id="linkCriarSenhaContainer" style="justify-content: center; margin-top: 16px;">
         <a onclick="mostrarTelaAuth('criar')"><i class="fa-solid fa-user-plus"></i> Primeiro Acesso / Criar Senha</a>
       </div>
     </div>
@@ -927,6 +927,16 @@
     const CHAVE_EDU_EXTRAS = 'marcos_especializacoes_extras_v1';
     const CHAVE_SKILLS_EXTRAS = 'marcos_competencias_extras_v1';
     const CHAVE_SQL_DB = 'marcos_sql_database_store_v1';
+    const CHAVE_SENHA_JA_CONFIGURADA = 'marcos_senha_ja_configurada_v1';
+
+    function verificarEstadoPrimeiroAcesso() {
+      const jaConfigurada = localStorage.getItem(CHAVE_SENHA_JA_CONFIGURADA) === 'true';
+      const containerCriar = document.getElementById('linkCriarSenhaContainer');
+      if (containerCriar) {
+        // Se a senha já foi criada ao menos uma vez, oculta o link de Primeiro Acesso
+        containerCriar.style.display = jaConfigurada ? 'none' : 'flex';
+      }
+    }
 
     /* ==========================================================================
        SISTEMA DE BANCO DE DADOS SQL COM HASH CRIPTOGRÁFICO (SHA-256 + SALT)
@@ -1191,6 +1201,10 @@
         novoRegistro
       );
 
+      // Marcar que a primeira senha já foi criada (esconder botão de Primeiro Acesso)
+      localStorage.setItem(CHAVE_SENHA_JA_CONFIGURADA, 'true');
+      verificarEstadoPrimeiroAcesso();
+
       alert('Senha criada e criptografada com sucesso no banco de dados SQL!');
       
       // Limpar os campos para que a palavra-chave e senhas desapareçam completamente
@@ -1222,6 +1236,10 @@
         erroBox.style.display = 'block';
         return;
       }
+
+      // Marcar que a senha já está configurada
+      localStorage.setItem(CHAVE_SENHA_JA_CONFIGURADA, 'true');
+      verificarEstadoPrimeiroAcesso();
 
       erroBox.style.display = 'none';
       alert('Autenticação de e-mail confirmada com sucesso! Nova senha registrada no banco de dados SQL.');
@@ -1545,7 +1563,10 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', verificarAutenticacao);
+    document.addEventListener('DOMContentLoaded', () => {
+      verificarEstadoPrimeiroAcesso();
+      verificarAutenticacao();
+    });
   </script>
 </body>
 </html>
