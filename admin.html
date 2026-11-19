@@ -645,7 +645,7 @@
         <i class="fa-solid fa-database"></i> SQL INSERT INTO admin_credentials
       </div>
       <h2>Criar Nova Senha</h2>
-      <p>Defina sua senha mestra pessoal e a sua palavra-chave de recuperação (<strong>engenharia0513020</strong>).</p>
+      <p>Defina sua senha mestra pessoal e sua palavra-chave secreta de recuperação.</p>
       
       <div style="text-align: left; margin-bottom: 6px; font-size: 0.78rem; color: #94a3b8;">NOVA SENHA DO PAINEL:</div>
       <input type="password" id="novaSenhaInput" placeholder="Digite sua nova senha" style="letter-spacing: normal;">
@@ -654,7 +654,7 @@
       <input type="password" id="confirmaSenhaInput" placeholder="Confirme sua nova senha" style="letter-spacing: normal;">
       
       <div style="text-align: left; margin-bottom: 6px; font-size: 0.78rem; color: #38bdf8;">PALAVRA-CHAVE DE SEGURANÇA:</div>
-      <input type="text" id="palavraRecuperacaoInput" placeholder="engenharia0513020" value="engenharia0513020" style="letter-spacing: normal;">
+      <input type="password" id="palavraRecuperacaoInput" placeholder="Digite sua palavra-chave secreta" value="" style="letter-spacing: normal;">
 
       <button class="btn-auth-submit" onclick="salvarNovaSenhaSQL()">
         <i class="fa-solid fa-floppy-disk"></i> Salvar Senha no Banco SQL
@@ -1114,6 +1114,17 @@
       document.getElementById('authErrorMsg').style.display = 'none';
       const msgRec = document.getElementById('recuperarMsgErro');
       if (msgRec) msgRec.style.display = 'none';
+
+      // Limpar campos de senha e palavra-chave para não ficarem expostos na tela
+      if (tela === 'criar') {
+        document.getElementById('novaSenhaInput').value = '';
+        document.getElementById('confirmaSenhaInput').value = '';
+        document.getElementById('palavraRecuperacaoInput').value = '';
+      } else if (tela === 'esqueci') {
+        document.getElementById('recuperarEmailInput').value = 'eusantosmarcos123@gmail.com';
+        document.getElementById('recuperarSenhaEmailInput').value = '';
+        document.getElementById('recuperarNovaSenhaInput').value = '';
+      }
     }
 
     /* AUTENTICAÇÃO COM HASH */
@@ -1181,6 +1192,12 @@
       );
 
       alert('Senha criada e criptografada com sucesso no banco de dados SQL!');
+      
+      // Limpar os campos para que a palavra-chave e senhas desapareçam completamente
+      document.getElementById('novaSenhaInput').value = '';
+      document.getElementById('confirmaSenhaInput').value = '';
+      document.getElementById('palavraRecuperacaoInput').value = '';
+
       mostrarTelaAuth('login');
       document.getElementById('adminPasswordInput').value = '';
     }
@@ -1208,6 +1225,11 @@
 
       erroBox.style.display = 'none';
       alert('Autenticação de e-mail confirmada com sucesso! Nova senha registrada no banco de dados SQL.');
+      
+      // Limpar todos os campos para desaparecer a palavra-chave e senhas após a alteração
+      document.getElementById('recuperarSenhaEmailInput').value = '';
+      document.getElementById('recuperarNovaSenhaInput').value = '';
+
       mostrarTelaAuth('login');
       document.getElementById('adminPasswordInput').value = '';
     }
