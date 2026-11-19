@@ -758,7 +758,7 @@
               <i class="fa-solid fa-upload"></i> Enviar Foto
             </button>
             <button class="btn-topbar" onclick="removerFotoPerfilAdmin()" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171;">
-              <i class="fa-solid fa-trash-can"></i> Restaurar Foto Padrão
+              <i class="fa-solid fa-trash-can"></i> Apagar Foto / Restaurar Padrão
             </button>
           </div>
         </div>
@@ -1359,11 +1359,12 @@
       window.location.reload();
     }
 
-    const CHAVE_FOTO_STORAGE = 'marcos_foto_perfil_customizada';
+    const CHAVE_FOTO_STORAGE = 'marcos_foto_perfil_custom';
+    const CHAVE_FOTO_STORAGE_ALT = 'marcos_foto_perfil_customizada';
 
     function carregarFotoAdmin() {
       const preview = document.getElementById('adminPreviewFoto');
-      const salva = localStorage.getItem(CHAVE_FOTO_STORAGE);
+      const salva = localStorage.getItem(CHAVE_FOTO_STORAGE) || localStorage.getItem(CHAVE_FOTO_STORAGE_ALT);
       if (preview) {
         preview.src = salva || 'marcos-sunglasses-real-pb.png';
       }
@@ -1376,6 +1377,7 @@
         reader.onload = function(e) {
           try {
             localStorage.setItem(CHAVE_FOTO_STORAGE, e.target.result);
+            localStorage.setItem(CHAVE_FOTO_STORAGE_ALT, e.target.result);
             carregarFotoAdmin();
             alert('Foto de perfil atualizada com sucesso no portfólio!');
           } catch(err) {
@@ -1388,10 +1390,11 @@
     }
 
     function removerFotoPerfilAdmin() {
-      if (confirm('Deseja restaurar a foto de perfil oficial padrão?')) {
+      if (confirm('Deseja apagar a foto personalizada e restaurar a foto oficial padrão?')) {
         localStorage.removeItem(CHAVE_FOTO_STORAGE);
+        localStorage.removeItem(CHAVE_FOTO_STORAGE_ALT);
         carregarFotoAdmin();
-        alert('Foto restaurada para a imagem padrão!');
+        alert('Foto apagada com sucesso! A imagem padrão oficial foi restaurada.');
       }
     }
 
