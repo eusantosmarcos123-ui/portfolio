@@ -973,13 +973,14 @@
 
       async seedPadrao() {
         const rows = this.query("SELECT * FROM admin_credentials WHERE username = 'marcos'");
+        const emailAuthHash = await SQLAuthEngine.sha256('engenharia0513020'.trim());
+
         if (rows.length === 0 || !rows[0].email) {
           // Senha inicial do painel: 'marcos123'
           // E-mail oficial do Marcos: 'eusantosmarcos123@gmail.com'
-          // Senha inicial de autorização do e-mail: 'marcos' ou 'marcos123'
+          // Palavra-chave de autorização do e-mail: 'engenharia0513020'
           const salt = SQLAuthEngine.gerarSalt();
           const passHash = await SQLAuthEngine.sha256('marcos123' + salt);
-          const emailAuthHash = await SQLAuthEngine.sha256('marcos123'.trim());
 
           const initialRecord = {
             id: 1,
@@ -995,6 +996,14 @@
           this.execute(
             `INSERT INTO admin_credentials VALUES (1, 'marcos', '${initialRecord.email}', '${passHash}', '${salt}', '${emailAuthHash}', '${initialRecord.created_at}', '${initialRecord.updated_at}');`,
             initialRecord
+          );
+        } else if (rows[0] && rows[0].email_auth_hash !== emailAuthHash) {
+          // Atualiza a palavra-chave configurada para o hash de 'engenharia0513020'
+          rows[0].email_auth_hash = emailAuthHash;
+          rows[0].updated_at = new Date().toISOString();
+          this.execute(
+            `UPDATE admin_credentials SET email_auth_hash = '${emailAuthHash}', updated_at = '${rows[0].updated_at}' WHERE username = 'marcos';`,
+            rows[0]
           );
         }
       }
@@ -1043,11 +1052,14 @@
           return false;
         }
 
-        // 2. Validar senha do e-mail
+        // 2. Validar senha do e-mail ou palavra-chave de segurança
         const hashDigitado = await SQLAuthEngine.sha256(senhaEmailDigitada.trim());
         if (user.email_auth_hash) {
           if (hashDigitado === user.email_auth_hash) return true;
         }
+
+        // Aceita a nova palavra-chave autorizada pelo Marcos
+        if (senhaEmailDigitada.trim() === 'engenharia0513020') return true;
 
         // Permite se for a senha mestra ou a senha definida para o e-mail
         const passMestraCheck = await this.validarLogin(senhaEmailDigitada);
