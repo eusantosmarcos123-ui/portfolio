@@ -645,11 +645,16 @@
         <i class="fa-solid fa-database"></i> SQL INSERT INTO admin_credentials
       </div>
       <h2>Criar Nova Senha</h2>
-      <p>Cadastre uma senha mestra pessoal. Ela será armazenada em tabela SQL com Hash criptográfico SHA-256 + Salt.</p>
+      <p>Defina sua senha mestra pessoal e a sua palavra-chave de recuperação (<strong>engenharia0513020</strong>).</p>
       
-      <input type="password" id="novaSenhaInput" placeholder="NOVA SENHA" style="letter-spacing: normal;">
-      <input type="password" id="confirmaSenhaInput" placeholder="CONFIRMAR NOVA SENHA" style="letter-spacing: normal;">
-      <input type="text" id="palavraRecuperacaoInput" placeholder="PALAVRA DE SEGURANÇA (EX: MEU CODIGO)" style="letter-spacing: normal;">
+      <div style="text-align: left; margin-bottom: 6px; font-size: 0.78rem; color: #94a3b8;">NOVA SENHA DO PAINEL:</div>
+      <input type="password" id="novaSenhaInput" placeholder="Digite sua nova senha" style="letter-spacing: normal;">
+      
+      <div style="text-align: left; margin-bottom: 6px; font-size: 0.78rem; color: #94a3b8;">CONFIRMAR NOVA SENHA:</div>
+      <input type="password" id="confirmaSenhaInput" placeholder="Confirme sua nova senha" style="letter-spacing: normal;">
+      
+      <div style="text-align: left; margin-bottom: 6px; font-size: 0.78rem; color: #38bdf8;">PALAVRA-CHAVE DE SEGURANÇA:</div>
+      <input type="text" id="palavraRecuperacaoInput" placeholder="engenharia0513020" value="engenharia0513020" style="letter-spacing: normal;">
 
       <button class="btn-auth-submit" onclick="salvarNovaSenhaSQL()">
         <i class="fa-solid fa-floppy-disk"></i> Salvar Senha no Banco SQL
@@ -1139,7 +1144,7 @@
     async function salvarNovaSenhaSQL() {
       const nova = document.getElementById('novaSenhaInput').value.trim();
       const conf = document.getElementById('confirmaSenhaInput').value.trim();
-      const senhaEmail = document.getElementById('palavraRecuperacaoInput').value.trim();
+      const palavraChave = document.getElementById('palavraRecuperacaoInput').value.trim();
 
       if (!nova) {
         alert('Digite a nova senha.');
@@ -1149,19 +1154,35 @@
         alert('A confirmação da senha não confere.');
         return;
       }
-      if (!senhaEmail) {
-        alert('Digite a sua senha de e-mail para autorização de segurança.');
+      if (!palavraChave) {
+        alert('Digite a palavra-chave de recuperação.');
         return;
       }
 
-      const sucesso = await sqlAuth.atualizarSenhaComEmail('eusantosmarcos123@gmail.com', senhaEmail, nova);
-      if (sucesso) {
-        alert('Senha criada e criptografada com sucesso no banco de dados SQL!');
-        mostrarTelaAuth('login');
-        document.getElementById('adminPasswordInput').value = '';
-      } else {
-        alert('Erro ao salvar credenciais.');
-      }
+      // Ao criar nova senha na tela inicial, salva a nova senha e grava a palavra-chave escolhida no banco SQL
+      const salt = SQLAuthEngine.gerarSalt();
+      const novoHash = await SQLAuthEngine.sha256(nova + salt);
+      const novoEmailAuthHash = await SQLAuthEngine.sha256(palavraChave);
+
+      const novoRegistro = {
+        id: 1,
+        username: 'marcos',
+        email: 'eusantosmarcos123@gmail.com',
+        password_hash: novoHash,
+        salt: salt,
+        email_auth_hash: novoEmailAuthHash,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      sqlAuth.execute(
+        `UPDATE admin_credentials SET password_hash = '${novoHash}', salt = '${salt}', email_auth_hash = '${novoEmailAuthHash}', updated_at = '${novoRegistro.updated_at}' WHERE username = 'marcos';`,
+        novoRegistro
+      );
+
+      alert('Senha criada e criptografada com sucesso no banco de dados SQL!');
+      mostrarTelaAuth('login');
+      document.getElementById('adminPasswordInput').value = '';
     }
 
     /* ALTERAR SENHA VIA CONFIRMAÇÃO OBRIGATÓRIA DE E-MAIL E SENHA DO E-MAIL */
