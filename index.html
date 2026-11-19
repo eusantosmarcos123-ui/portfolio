@@ -1273,20 +1273,9 @@
         <!-- O Anel Branco Luminoso Idêntico ao da Imagem de Referência -->
         <div class="white-halo-ring"></div>
 
-        <!-- Campo Interativo de Foto de Perfil -->
-        <div class="sculpture-figure" id="sculptureFigure" onclick="abrirMenuFoto(event)">
-          <img id="avatarImage" src="" alt="Foto de Marcos Vinícius">
-          
-          <div class="avatar-empty-placeholder" id="avatarPlaceholder">
-            <div class="icon-wrapper">
-              <i class="fa-solid fa-user-plus"></i>
-            </div>
-            <div class="title">Adicionar Foto de Perfil</div>
-            <div class="subtitle">Toque para escolher da galeria<br>ou tirar foto agora</div>
-            <div class="avatar-action-pill">
-              <i class="fa-solid fa-camera"></i> Escolher Foto
-            </div>
-          </div>
+        <!-- Escultura de Foto de Perfil (Exibição Oficial do Marcos) -->
+        <div class="sculpture-figure" id="sculptureFigure">
+          <img id="avatarImage" src="marcos-sunglasses-real-pb.png" alt="Foto de Marcos Vinícius" style="display: block;">
         </div>
 
         <!-- Tag Flutuante com Metadados de Autoridade -->
@@ -1776,21 +1765,10 @@
 
     function carregarFotoPerfil() {
       const img = document.getElementById('avatarImage');
-      const placeholder = document.getElementById('avatarPlaceholder');
-      const btnRemover = document.getElementById('btnRemoverFoto');
+      if (!img) return;
       const fotoSalva = localStorage.getItem(CHAVE_FOTO_STORAGE);
-
-      if (fotoSalva) {
-        img.src = fotoSalva;
-        img.style.display = 'block';
-        placeholder.style.display = 'none';
-        if (btnRemover) btnRemover.style.display = 'flex';
-      } else {
-        img.src = '';
-        img.style.display = 'none';
-        placeholder.style.display = 'flex';
-        if (btnRemover) btnRemover.style.display = 'none';
-      }
+      img.src = fotoSalva || 'marcos-sunglasses-real-pb.png';
+      img.style.display = 'block';
     }
 
     function abrirMenuFoto(e) {

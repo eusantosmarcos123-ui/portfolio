@@ -744,6 +744,39 @@
 
     <div class="dashboard-sections">
       
+      <!-- SEÇÃO 0: FOTO DE PERFIL EXCLUSIVA (GESTÃO DE IMAGEM) -->
+      <div class="panel-box" style="grid-column: 1 / -1; margin-bottom: 8px;">
+        <div class="panel-box-header">
+          <div>
+            <h2><i class="fa-solid fa-camera-retro" style="color: #38bdf8;"></i> Foto de Perfil do Portfólio</h2>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+              Gerenciamento da sua foto exibida na moldura do portfólio oficial.
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-add-action" onclick="document.getElementById('adminInputFoto').click()">
+              <i class="fa-solid fa-upload"></i> Enviar Foto
+            </button>
+            <button class="btn-topbar" onclick="removerFotoPerfilAdmin()" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171;">
+              <i class="fa-solid fa-trash-can"></i> Restaurar Foto Padrão
+            </button>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 24px; padding: 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; margin-top: 10px;">
+          <div style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; border: 2px solid #0047FF; flex-shrink: 0; box-shadow: 0 0 18px rgba(0, 71, 255, 0.4);">
+            <img id="adminPreviewFoto" src="marcos-sunglasses-real-pb.png" alt="Prévia Marcos Vinícius" style="width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(100%);">
+          </div>
+          <div>
+            <div style="font-weight: 700; color: #FFF; font-size: 0.95rem;">Foto Atual do Portfólio</div>
+            <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 4px;">
+              Formatos aceitos: JPG, PNG, WebP. A foto é aplicada com o enquadramento preto e branco oficial do tema.
+            </div>
+          </div>
+          <input type="file" id="adminInputFoto" accept="image/*" style="display: none;" onchange="processarFotoAdmin(this)">
+        </div>
+      </div>
+
       <!-- SEÇÃO 1: GESTÃO DE ESPECIALIZAÇÕES & CURSOS -->
       <div class="panel-box">
         <div class="panel-box-header">
@@ -1326,7 +1359,44 @@
       window.location.reload();
     }
 
+    const CHAVE_FOTO_STORAGE = 'marcos_foto_perfil_customizada';
+
+    function carregarFotoAdmin() {
+      const preview = document.getElementById('adminPreviewFoto');
+      const salva = localStorage.getItem(CHAVE_FOTO_STORAGE);
+      if (preview) {
+        preview.src = salva || 'marcos-sunglasses-real-pb.png';
+      }
+    }
+
+    function processarFotoAdmin(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            localStorage.setItem(CHAVE_FOTO_STORAGE, e.target.result);
+            carregarFotoAdmin();
+            alert('Foto de perfil atualizada com sucesso no portfólio!');
+          } catch(err) {
+            alert('A foto é muito grande para salvar no cache local. Tente uma foto menor ou comprimida.');
+          }
+          input.value = '';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function removerFotoPerfilAdmin() {
+      if (confirm('Deseja restaurar a foto de perfil oficial padrão?')) {
+        localStorage.removeItem(CHAVE_FOTO_STORAGE);
+        carregarFotoAdmin();
+        alert('Foto restaurada para a imagem padrão!');
+      }
+    }
+
     function carregarDadosAdmin() {
+      carregarFotoAdmin();
       renderizarEspecializacoesAdmin();
       renderizarCompetenciasAdmin();
       recarregarPainelSQL();
