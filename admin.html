@@ -758,14 +758,17 @@
               <i class="fa-solid fa-upload"></i> Enviar Foto
             </button>
             <button class="btn-topbar" onclick="removerFotoPerfilAdmin()" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171;">
-              <i class="fa-solid fa-trash-can"></i> Apagar Foto / Restaurar Padrão
+              <i class="fa-solid fa-trash-can"></i> Apagar Foto
             </button>
           </div>
         </div>
 
         <div style="display: flex; align-items: center; gap: 24px; padding: 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; margin-top: 10px;">
-          <div style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; border: 2px solid #0047FF; flex-shrink: 0; box-shadow: 0 0 18px rgba(0, 71, 255, 0.4);">
-            <img id="adminPreviewFoto" src="marcos-sunglasses-real-pb.png" alt="Prévia Marcos Vinícius" style="width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(100%);">
+          <div style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; border: 2px solid #0047FF; flex-shrink: 0; box-shadow: 0 0 18px rgba(0, 71, 255, 0.4); background: radial-gradient(circle at center, #0e172a 0%, #050811 100%); display: flex; align-items: center; justify-content: center;">
+            <img id="adminPreviewFoto" src="" alt="Prévia Marcos Vinícius" style="width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(100%); display: none;">
+            <div id="adminPlaceholderFoto" style="display: flex; flex-direction: column; align-items: center; justify-content: center; color: #38bdf8; font-size: 1.8rem;">
+              <i class="fa-solid fa-user"></i>
+            </div>
           </div>
           <div>
             <div style="font-weight: 700; color: #FFF; font-size: 0.95rem;">Foto Atual do Portfólio</div>
@@ -1364,9 +1367,21 @@
 
     function carregarFotoAdmin() {
       const preview = document.getElementById('adminPreviewFoto');
+      const placeholder = document.getElementById('adminPlaceholderFoto');
       const salva = localStorage.getItem(CHAVE_FOTO_STORAGE) || localStorage.getItem(CHAVE_FOTO_STORAGE_ALT);
-      if (preview) {
-        preview.src = salva || 'marcos-sunglasses-real-pb.png';
+      
+      if (salva && salva !== 'NONE') {
+        if (preview) {
+          preview.src = salva;
+          preview.style.display = 'block';
+        }
+        if (placeholder) placeholder.style.display = 'none';
+      } else {
+        if (preview) {
+          preview.src = '';
+          preview.style.display = 'none';
+        }
+        if (placeholder) placeholder.style.display = 'flex';
       }
     }
 
@@ -1390,11 +1405,12 @@
     }
 
     function removerFotoPerfilAdmin() {
-      if (confirm('Deseja apagar a foto personalizada e restaurar a foto oficial padrão?')) {
-        localStorage.removeItem(CHAVE_FOTO_STORAGE);
-        localStorage.removeItem(CHAVE_FOTO_STORAGE_ALT);
+      if (confirm('Deseja apagar a foto de perfil?')) {
+        // Marca explicitamente como 'NONE' e remove qualquer foto em cache
+        localStorage.setItem(CHAVE_FOTO_STORAGE, 'NONE');
+        localStorage.setItem(CHAVE_FOTO_STORAGE_ALT, 'NONE');
         carregarFotoAdmin();
-        alert('Foto apagada com sucesso! A imagem padrão oficial foi restaurada.');
+        alert('Foto apagada com sucesso do portfólio!');
       }
     }
 

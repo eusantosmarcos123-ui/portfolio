@@ -1275,7 +1275,10 @@
 
         <!-- Escultura de Foto de Perfil (Exibição Oficial do Marcos) -->
         <div class="sculpture-figure" id="sculptureFigure">
-          <img id="avatarImage" src="marcos-sunglasses-real-pb.png" alt="Foto de Marcos Vinícius" style="display: block;">
+          <img id="avatarImage" src="" alt="Foto de Marcos Vinícius" style="display: none;">
+          <div id="avatarEmptySilhouette" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; color: #38bdf8; font-size: 3.8rem;">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
         </div>
 
         <!-- Tag Flutuante com Metadados de Autoridade -->
@@ -1765,10 +1768,19 @@
 
     function carregarFotoPerfil() {
       const img = document.getElementById('avatarImage');
+      const silhueta = document.getElementById('avatarEmptySilhouette');
       if (!img) return;
       const fotoSalva = localStorage.getItem(CHAVE_FOTO_STORAGE);
-      img.src = fotoSalva || 'marcos-sunglasses-real-pb.png';
-      img.style.display = 'block';
+      
+      if (fotoSalva && fotoSalva !== 'NONE') {
+        img.src = fotoSalva;
+        img.style.display = 'block';
+        if (silhueta) silhueta.style.display = 'none';
+      } else {
+        img.src = '';
+        img.style.display = 'none';
+        if (silhueta) silhueta.style.display = 'flex';
+      }
     }
 
     function abrirMenuFoto(e) {
